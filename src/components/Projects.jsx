@@ -11,7 +11,7 @@ const spotlightProjects = [
     techStack: "C# (Unity)",
     link: "https://github.com/slakh96/no-mans-land",
     open: "https://gazijarin.itch.io/no-mans-land",
-    image: import.meta.env.BASE_URL + "nomansland.png",
+    image: import.meta.env.BASE_URL + "assets/nomansland.png",
 
   },
   {
@@ -20,7 +20,7 @@ const spotlightProjects = [
     techStack: "Node.js (Socket.io), React.js, MongoDB",
     link: "https://github.com/gazijarin/TallTales",
     open: "https://talltales.herokuapp.com/",
-    image: import.meta.env.BASE_URL + "talltales.png",
+    image: import.meta.env.BASE_URL + "assets/talltales.png",
   },
   {
     title: "Portfolio.js",
@@ -28,7 +28,7 @@ const spotlightProjects = [
     techStack: "Node.js (Express.js)",
     link: "https://github.com/gazijarin/Portfolio.js",
     open: "https://afternoon-ocean-92382.herokuapp.com/",
-    image: import.meta.env.BASE_URL + "portfolio.png",
+    image: import.meta.env.BASE_URL + "assets/portfolio.png",
   },
 ];
 
