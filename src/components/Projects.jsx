@@ -1,4 +1,7 @@
 import "../styles/Projects.css";
+import portfolioImg from "../assets/portfolio.png";
+import nomanslandImg from "../assets/nomansland.png";
+import talltalesImg from "../assets/talltales.png";
 import FolderOpenRoundedIcon from "@mui/icons-material/FolderOpenRounded";
 import Carousel from "react-bootstrap/Carousel";
 import FadeInSection from "./FadeInSection";
@@ -11,7 +14,7 @@ const spotlightProjects = [
     techStack: "C# (Unity)",
     link: "https://github.com/slakh96/no-mans-land",
     open: "https://gazijarin.itch.io/no-mans-land",
-    image: "../assets/nomansland.png",
+    image: nomanslandImg,
   },
   {
     title: "Tall Tales",
@@ -19,7 +22,7 @@ const spotlightProjects = [
     techStack: "Node.js (Socket.io), React.js, MongoDB",
     link: "https://github.com/gazijarin/TallTales",
     open: "https://talltales.herokuapp.com/",
-    image: "../assets/talltales.png",
+    image: talltalesImg,
   },
   {
     title: "Portfolio.js",
@@ -27,7 +30,7 @@ const spotlightProjects = [
     techStack: "Node.js (Express.js)",
     link: "https://github.com/gazijarin/Portfolio.js",
     open: "https://afternoon-ocean-92382.herokuapp.com/",
-    image: "../assets/portfolio.png",
+    image: portfolioImg,
   },
 ];
 
