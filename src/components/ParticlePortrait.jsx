@@ -40,7 +40,7 @@ const ParticlePortrait = () => {
 
     const img = new Image();
     img.crossOrigin = "Anonymous";
-    img.src = "/profile.png";
+    img.src = "../public/profile.png";
 
     img.onload = () => {
       const offscreen = document.createElement("canvas");
