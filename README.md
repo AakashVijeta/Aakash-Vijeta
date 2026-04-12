@@ -1,16 +1,47 @@
-# React + Vite
+# aakashvijeta.me
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Personal portfolio site — live at [aakashvijeta.me](https://aakashvijeta.me).
 
-Currently, two official plugins are available:
+Dark, minimal, single-page site with an interactive particle portrait, animated navigation, and a spotlight layout for featured work.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Tech stack
 
-## React Compiler
+- React 19 + Vite
+- MUI + Bootstrap for UI primitives
+- Custom Canvas animation for the particle portrait
+- Deployed on Vercel
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Getting started
 
-## Expanding the ESLint configuration
+```bash
+npm install
+npm run dev
+```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Then open http://localhost:5173.
+
+## Scripts
+
+- `npm run dev` — start the dev server
+- `npm run build` — production build to `dist/`
+- `npm run preview` — preview the production build locally
+- `npm run lint` — run ESLint
+
+## Project structure
+
+```
+src/
+  components/    React components (Intro, Projects, NavBar, ParticlePortrait, ...)
+  styles/        Per-component CSS
+  App.jsx        Root layout
+  main.jsx       Entry point
+public/          Static assets
+```
+
+## Deployment
+
+Configured for Vercel (see [vercel.json](vercel.json)). Push to `main` and Vercel handles the rest. Custom domain routing is managed via DNS records pointing at Vercel.
+
+## License
+
+Personal project — feel free to read the source for reference, but please don't redeploy it as your own.

@@ -82,37 +82,6 @@
   position: relative;
 }
 
-#projects::before,
-#projects::after {
-  content: "";
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(90px);
-  opacity: 0.35;
-  pointer-events: none;
-  z-index: 0;
-}
-
-#projects::before {
-  width: 380px;
-  height: 380px;
-  background: var(--accent);
-  opacity: 0.12;
-  top: 120px;
-  right: -80px;
-  animation: blobDrift 18s ease-in-out infinite;
-}
-
-#projects::after {
-  width: 280px;
-  height: 280px;
-  background: var(--lightest-slate);
-  opacity: 0.06;
-  bottom: 60px;
-  left: -60px;
-  animation: blobDrift 22s ease-in-out infinite reverse;
-}
-
 @keyframes blobDrift {
   0%, 100% { transform: translate(0, 0) scale(1); }
   50% { transform: translate(30px, -40px) scale(1.1); }
@@ -144,6 +113,29 @@
   min-height: 220px;
 }
 
+.spotlight-list > *:nth-child(even) .spotlight-row {
+  grid-template-columns: 1fr 1.15fr;
+  padding: 28px 8px 28px 48px;
+}
+
+.spotlight-list > *:nth-child(even) .spotlight-info {
+  order: 2;
+}
+
+.spotlight-list > *:nth-child(even) .spotlight-media {
+  order: 1;
+}
+
+.spotlight-list > *:nth-child(even) .spotlight-chevron {
+  left: 16px;
+  right: auto;
+  transform: translateY(-50%) scaleX(-1);
+}
+
+.spotlight-list > *:nth-child(even) .spotlight-row:hover .spotlight-chevron {
+  transform: translate(-4px, -50%) scaleX(-1);
+}
+
 .spotlight-row:hover {
   background-color: rgb(255 255 255 / 2%);
 }
@@ -172,9 +164,9 @@
   font-weight: bold;
   letter-spacing: 0.6px;
   text-transform: uppercase;
-  color: var(--green-bright);
-  background-color: var(--accent-soft);
-  border: 1px solid var(--accent-glow);
+  color: var(--accent-warm);
+  background-color: var(--accent-warm-soft);
+  border: 1px solid var(--accent-warm-glow);
   padding: 4px 10px;
   border-radius: 999px;
   margin-bottom: 4px;
@@ -226,6 +218,7 @@
   overflow: hidden;
   border-radius: 12px;
   background-color: var(--light-navy);
+  z-index: 1;
 }
 
 .spotlight-media img {

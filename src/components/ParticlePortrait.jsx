@@ -162,11 +162,7 @@ const ParticlePortrait = () => {
         p.x += p.vx;
         p.y += p.vy;
 
-        const isLight =
-          document.documentElement.getAttribute("data-theme") === "light";
-        ctx.strokeStyle = isLight
-          ? `rgba(26, 26, 24, ${p.currentAlpha})`
-          : `rgba(255, 255, 255, ${p.currentAlpha})`;
+        ctx.strokeStyle = `rgba(255, 255, 255, ${p.currentAlpha})`;
         ctx.lineWidth = size <= 280 ? 1.5 : 2.25;
         ctx.beginPath();
         ctx.moveTo(p.x, p.y);

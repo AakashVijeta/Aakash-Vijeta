@@ -7,7 +7,6 @@ import "./App.css";
 import Projects from "./components/Projects";
 import Credits from "./components/Credits";
 import StatusChrome from "./components/StatusChrome";
-import ThemeToggle from "./components/ThemeToggle";
 import Preloader from "./components/Preloader";
 
 function App() {
@@ -16,12 +15,11 @@ function App() {
       <Preloader />
       <div className="grain" aria-hidden="true" />
       <StatusChrome />
-      <ThemeToggle />
       <NavBar />
       <div id="content">
-        <Intro />
-        <About />
+        <Intro />\
         <Projects />
+        <About />
         <Credits />
       </div>
     </div>

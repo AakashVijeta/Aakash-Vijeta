@@ -22,9 +22,27 @@
 }
 
 .intro-simulation {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
+  isolation: isolate;
+}
+
+.intro-simulation::before {
+  content: "";
+  position: absolute;
+  inset: -130%;
+  background: radial-gradient(
+    circle at center,
+    var(--accent) 0%,
+    transparent 65%
+  );
+  filter: blur(100px);
+  opacity: 0.18;
+  z-index: -1;
+  pointer-events: none;
+  animation: blobDrift 20s ease-in-out infinite;
 }
 
 .intro-block {

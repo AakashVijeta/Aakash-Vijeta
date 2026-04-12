@@ -11,6 +11,7 @@ const spotlightProjects = [
     desc: "End-to-end ML system combining a Python training pipeline, a FastAPI prediction service backed by SQLite, and a React frontend for race-weekend exploration.",
     techStack: "Python · XGBoost · FastAPI · SQLite · React",
     link: "https://github.com/AakashVijeta/f1-podium-predictor",
+    open: "https://f1.aakashvijeta.me",
     image: import.meta.env.BASE_URL + "assets/f1-predictor.png",
   },
   {
