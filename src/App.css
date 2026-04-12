@@ -95,7 +95,8 @@ html {
   font-family: "NTR";
   background-color: var(--navy);
   display: flex;
-  margin: auto;
+  width: 100%;
+  min-height: 100vh;
 }
 
 .App-logo {
@@ -109,9 +110,9 @@ a {
 }
 
 #content {
-  width: 100vw;
-  overflow-x: hidden;
-  overflow-y: hidden;
+  width: 100%;
+  flex: 1;
+  min-width: 0;
 }
 
 .rs-steps-horizontal .rs-steps-item-content {
@@ -137,15 +138,16 @@ a {
 
 .section-header {
   display: flex;
+  align-items: center;
   padding-bottom: 42px;
-  width: 100vw;
+  width: 100%;
 }
 
 .section-header::after {
   content: "";
   display: block;
-  width: 300px;
-  margin-top: 39px;
+  flex: 1;
+  max-width: 300px;
   height: 1px;
   margin-left: 20px;
   background-color: var(--lightest-navy);
@@ -158,19 +160,25 @@ a {
   font-weight: bold;
 }
 
+@media only screen and (max-width: 900px) {
+  .section-title {
+    font-size: 38px;
+  }
+}
+
 @media only screen and (max-width: 600px) {
   .App {
     flex-direction: column;
-    padding: 0px 24px;
+    padding: 0;
   }
 
   #content {
-    padding: 10px 10px;
+    padding: 0 20px;
     width: 100%;
   }
 
   .section-header {
-    width: unset;
+    padding-bottom: 28px;
   }
 
   .section-header::after {
@@ -178,6 +186,6 @@ a {
   }
 
   .section-title {
-    font-size: 32px;
+    font-size: 28px;
   }
 }

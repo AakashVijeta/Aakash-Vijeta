@@ -38,11 +38,21 @@
   }
 
   #brand {
-    margin-left: 75px;
+    margin-left: 12px;
   }
 
   .ml-auto {
-    margin-right: 50px;
+    margin-right: 12px;
+  }
+
+  @media (min-width: 992px) {
+    #brand {
+      margin-left: 40px;
+    }
+
+    .ml-auto {
+      margin-right: 40px;
+    }
   }
   .navbar-light .navbar-brand  {
     color: var(--lightest-slate) !important;
@@ -57,11 +67,20 @@
   }
 
   @media only screen and (max-width: 600px) {
-    .navbar-light .navbar-brand  {
-        display: none;
+    .navbar > .container {
+      padding: 4px 14px;
     }
-  
+
     .navbar-light .navbar-nav.me-auto .nav-link {
-        display: none;
-      }
+      display: none;
+    }
+
+    #brand {
+      margin-left: 0;
+      font-size: 16px;
+    }
+
+    .ml-auto {
+      margin-right: 0;
+    }
   }
