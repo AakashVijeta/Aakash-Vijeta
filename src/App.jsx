@@ -2,7 +2,6 @@ import { SectionProvider } from './context/SectionContext';
 import SectionManager from './components/SectionManager';
 import ProjectOverlay from './components/ProjectOverlay';
 import Preloader from './components/Preloader';
-import StatusChrome from './components/StatusChrome';
 import ThemeToggle from './components/ThemeToggle';
 import IntroSection from './components/sections/IntroSection';
 import ProjectsSection from './components/sections/ProjectsSection';
@@ -24,7 +23,6 @@ function App() {
     <SectionProvider>
       <div className="App">
         <Preloader />
-        <StatusChrome />
         <ThemeToggle />
         <SectionManager sections={SECTION_COMPONENTS} />
         <ProjectOverlay />
