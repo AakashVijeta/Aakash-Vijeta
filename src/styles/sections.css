@@ -24,4 +24,12 @@
   .key-hints {
     display: none;
   }
+
+  /* About: stack portrait above content */
+  .about-section {
+    flex-direction: column !important;
+    padding: 40px 6vw !important;
+    justify-content: center !important;
+    gap: 28px !important;
+  }
 }
