@@ -1,26 +1,18 @@
-html, body, #root {
-  width: 100%;
-  min-width: 100%;
-  min-height: 100vh;
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700&family=DM+Sans:wght@400;500;600&family=Share+Tech+Mono&display=swap');
+
+*, *::before, *::after {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
+html {
+  /* GSAP owns all scroll — no native smooth scroll */
+  scroll-behavior: auto;
+}
+
 body {
-  background-color: var(--navy) !important;
-  color: var(--lightest-slate);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
+  overscroll-behavior: none;
+  overflow: hidden; /* SectionManager controls what's visible */
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-#root {
-  display: block;
-}
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
 }
