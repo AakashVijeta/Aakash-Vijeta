@@ -74,6 +74,20 @@ Single-page React app (existing stack). Five full-screen sections stacked vertic
 - Key hints fade in after 3s idle, fade out on first interaction (hidden on mobile)
 - GSAP Observer used for swipe detection — replaces Bootstrap collapse nav entirely
 
+### Scroll Quality
+
+The scroll experience must feel intentional and never janky. Key rules:
+
+**Transition lock:** While a transition is playing, all scroll/swipe/key inputs are ignored. A boolean `isTransitioning` flag gates every input handler. This prevents double-fires from trackpad momentum or fast key repeats.
+
+**Trackpad / high-resolution wheel:** Trackpads fire many small `deltaY` events rather than one large one. Use a `wheelDeltaAccumulator` — only trigger a section change once the accumulated delta exceeds a threshold (e.g. `±80px`). Reset accumulator after each section change. Prevents the site from skipping two sections on a single trackpad flick.
+
+**Touch swipe threshold:** Only advance a section if the swipe travel exceeds `50px` vertically. Ignore horizontal-dominant swipes (for any future horizontal scroll elements). Managed via GSAP Observer's `minimumMovement` option.
+
+**Direction clamping:** Cannot scroll past section 1 (backward) or section 5 (forward). Inputs at the boundary are silently ignored — no bounce, no error state.
+
+**Keyboard repeat rate:** Arrow key `keydown` fires repeatedly if held. Apply the same `isTransitioning` lock — held arrow key advances one section per transition completion, not per keyframe.
+
 ---
 
 ## 4. Transitions
