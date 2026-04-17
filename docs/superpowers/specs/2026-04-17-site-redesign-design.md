@@ -18,19 +18,19 @@ Single-page React app (existing stack). Five full-screen sections stacked vertic
 
 **Theme system:** `data-theme="f1" | "terminal"` attribute on `<html>`. All colors defined as CSS custom properties scoped to each theme value. Toggle swaps the attribute — no JS repaints, pure CSS cascade.
 
-**Animation library:** GSAP core + ScrollTrigger + CustomEase (~35KB gzipped). CSS owns static theme properties; GSAP owns all motion.
+**Animation library:** GSAP core + Observer + CustomEase (~28KB gzipped). CSS owns static theme properties; GSAP owns all motion. ScrollTrigger is not needed — scroll is fully intercepted.
 
 ---
 
 ## 2. Sections
 
-| # | Name | Route key |
-|---|------|-----------|
-| 1 | Intro | `/` |
-| 2 | Projects | `/projects` |
-| 3 | About | `/about` |
-| 4 | Contact | `/contact` |
-| 5 | Credits | `/credits` |
+| # | Name | Section ID |
+|---|------|------------|
+| 1 | Intro | `intro` |
+| 2 | Projects | `projects` |
+| 3 | About | `about` |
+| 4 | Contact | `contact` |
+| 5 | Credits | `credits` |
 
 ### 2.1 Intro
 - Particle Portrait centered, full viewport
@@ -117,7 +117,7 @@ Total: ~200ms.
 - GSAP Observer replaces Bootstrap collapse nav
 
 ### Performance
-- Particle Portrait canvas capped at 30fps on mobile via `gsap.ticker.fps(30)`
+- Particle Portrait canvas render loop throttled to 30fps on mobile via a `lastTime` timestamp check inside `requestAnimationFrame` — does not affect GSAP animations globally
 - `blur(100px)` on `.intro-simulation::before` stays disabled on mobile (already in place)
 - Glitch cut replaced with 150ms fast fade on mobile (too GPU-intensive)
 - GSAP ticker pauses on `visibilitychange` when tab is hidden
