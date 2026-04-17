@@ -18,6 +18,17 @@
   will-change: opacity, transform;
 }
 
+/* Project card: lift + accent glow on hover (per spec) */
+.project-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--color-accent);
+  box-shadow: 0 12px 32px -8px var(--color-accent), var(--glow-strong);
+}
+
+.project-card:hover img {
+  transform: scale(1.04);
+}
+
 @media (max-width: 768px) {
   .section-counter,
   .key-hints {

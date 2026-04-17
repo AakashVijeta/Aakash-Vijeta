@@ -3,9 +3,9 @@
   --color-bg:       #050905;
   --color-surface:  #070d07;
   --color-accent:   #00ff41;
-  --color-text:     #c8f5d4;   /* readable phosphor off-white */
-  --color-muted:    #6abf82;   /* visible secondary text */
-  --color-border:   #1a5c30;
+  --color-text:     #00ff41;
+  --color-muted:    #005a15;
+  --color-border:   #002208;
   --color-white:    #e8ffe8;
 
   --font-display: 'Share Tech Mono', monospace;
@@ -96,6 +96,40 @@ body::after {
   height: 100%;
   background: var(--color-accent);
   pointer-events: none;
+}
+
+/* ── F1: corner accents on sections ──────────────────────────── */
+[data-theme="f1"] .section-stripe::after {
+  content: '';
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 32px;
+  height: 32px;
+  border-top: 2px solid var(--color-accent);
+  border-right: 2px solid var(--color-accent);
+  pointer-events: none;
+}
+
+/* ── F1: speed line under section headers ────────────────────── */
+[data-theme="f1"] .speed-line {
+  display: block;
+  height: 2px;
+  background: linear-gradient(to right, var(--color-accent), transparent);
+  margin-top: 8px;
+}
+
+/* ── Terminal: phosphor glow on headings and accent text ─────── */
+:root:not([data-theme="f1"]) h1,
+:root:not([data-theme="f1"]) h2,
+:root:not([data-theme="f1"]) h3,
+:root:not([data-theme="f1"]) .phosphor,
+:root:not([data-theme="f1"]) .section-enter-item[style*="--color-accent"] {
+  text-shadow: 0 0 8px rgba(0, 255, 65, 0.5);
+}
+
+:root:not([data-theme="f1"]) body {
+  text-shadow: 0 0 6px rgba(0, 255, 65, 0.35);
 }
 
 /* ── Reduced motion ──────────────────────────────────────────── */
