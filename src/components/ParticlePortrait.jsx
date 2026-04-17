@@ -145,7 +145,19 @@ const ParticlePortrait = () => {
       startTimeRef.current = performance.now();
     };
 
+    let lastMobileFrame = 0;
+
     const draw = () => {
+      // Throttle to ~30fps on mobile to save GPU
+      if (window.innerWidth <= 768) {
+        const now = performance.now();
+        if (now - lastMobileFrame < 33) {
+          animationId = requestAnimationFrame(draw);
+          return;
+        }
+        lastMobileFrame = now;
+      }
+
       ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 
       if (!imageLoadedRef.current) {
@@ -251,7 +263,7 @@ const ParticlePortrait = () => {
 
     canvas.addEventListener("mousemove", handleMouseMove);
     canvas.addEventListener("mouseleave", handleLeave);
-    canvas.addEventListener("touchmove", handleTouchMove);
+    canvas.addEventListener("touchmove", handleTouchMove, { passive: true }); // passive: unblocks scroll
     canvas.addEventListener("touchend", handleLeave);
 
     draw();
