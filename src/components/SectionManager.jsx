@@ -65,7 +65,7 @@ export default function SectionManager({ sections }) {
       await wipeRef.current.play();
       goTo(nextIndex);
     } else {
-      await glitchRef.current.play();
+      await glitchRef.current.play(sectionRefs.current[activeIndex]);
       goTo(nextIndex);
     }
 

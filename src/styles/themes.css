@@ -3,9 +3,9 @@
   --color-bg:       #050905;
   --color-surface:  #070d07;
   --color-accent:   #00ff41;
-  --color-text:     #b8f5c8;   /* readable phosphor — not full-brightness green */
-  --color-muted:    #4a8c5c;
-  --color-border:   #0d3318;
+  --color-text:     #c8f5d4;   /* readable phosphor off-white */
+  --color-muted:    #6abf82;   /* visible secondary text */
+  --color-border:   #1a5c30;
   --color-white:    #e8ffe8;
 
   --font-display: 'Share Tech Mono', monospace;
