@@ -1,9 +1,12 @@
 const BASE = import.meta.env.BASE_URL;
 
 const CORE_SKILLS = [
-  'Python', 'React', 'TypeScript', 'FastAPI',
-  'scikit-learn', 'XGBoost', 'PostgreSQL', 'Docker',
-  'Pandas', 'NumPy', 'Vite', 'GSAP',
+  'Python', 'React',
+  'FastAPI', 'TypeScript',
+  'scikit-learn', 'XGBoost',
+  'PostgreSQL', 'Docker',
+  'Pandas', 'NumPy',
+  'Vite', 'GSAP',
   'Node.js', 'SQL',
 ];
 
@@ -16,25 +19,30 @@ const SOFT_SKILLS = [
 const EDUCATION = [
   {
     org: 'IIT GUWAHATI',
-    range: '2023 — 2027',
-    line: 'B.TECH - Data Science & Artificial Intelligence',
+    range: '2023 - 2027',
+    line: 'BACHELOR - Data Science & Artificial Intelligence',
+  },
+  {
+    org: 'SELF-TAUGHT',
+    range: '2018 - 2023',
+    line: 'FOUNDATIONS - Programming & Applied Mathematics',
   },
 ];
 
 const EXPERIENCES = [
   {
-    org: '[3 YEARS BUILDING]',
-    range: '2023 — 2026',
-    line: 'PROJECTS - F1 Podium Predictor · NiftyEdge',
+    org: '[F1 PODIUM PREDICTOR]',
+    range: '2025 - 2026',
+    line: 'MACHINE LEARNING - Calibrated Probability Service',
   },
   {
-    org: '[INTERNSHIPS + LABS]',
-    range: '2024 — 2026',
-    line: 'VARIOUS - ML Research · Applied Systems',
+    org: '[NIFTYEDGE]',
+    range: '2025 - 2026',
+    line: 'QUANT RESEARCH - Walk-forward XGBoost Signals',
   },
   {
     org: '[8 YEARS PROGRAMMING]',
-    range: '2018 — 2026',
+    range: '2018 - 2026',
     line: 'TOTAL_RUNTIME - Continuous Learning Protocol',
   },
 ];
@@ -57,7 +65,7 @@ export default function AboutSection() {
         <div className="about-v2-title">SUBJECT PROFILE</div>
         <div className="about-v2-topmeta">
           <div>CASE FILE: AV-03</div>
-          <div>STATUS: BUILDING</div>
+          <div>STATUS: GRADUATING</div>
         </div>
       </div>
 
@@ -75,16 +83,16 @@ export default function AboutSection() {
             <div className="about-v2-photo-bracket br" />
           </div>
           <div className="about-v2-fields">
-            <div><span>CLASS</span><span>ML_ENGINEER</span></div>
-            <div><span>N. LEVEL</span><span>B.TECH_DS+AI</span></div>
-            <div><span>LVL_1</span><span>EN (Fluent)</span></div>
-            <div><span>LVL_2</span><span>HI (Native)</span></div>
+            <div><span>CLASS</span><span>DEV_ML-FULLSTACK</span></div>
+            <div><span>N. LEVEL</span><span>BACHELOR_DEGREE</span></div>
+            <div><span>LVL_1</span><span>HI (Native)</span></div>
+            <div><span>LVL_2</span><span>EN (Fluent)</span></div>
           </div>
           <div className="about-v2-status-alert">
             <span className="about-v2-status-chip">STATUS: ALERT</span>
             <div className="about-v2-status-main">OPEN TO WORK</div>
             <div className="about-v2-status-sub">
-              <span>INTERNSHIPS</span>
+              <span>2 PROJECTS SHIPPED</span>
               <span>REMOTE_READY</span>
             </div>
           </div>
@@ -98,10 +106,9 @@ export default function AboutSection() {
           </div>
 
           <p className="about-v2-bio">
-            Builder obsessed with the intersection of <span className="hl-1">machine learning</span>,{' '}
-            <span className="hl-2">software engineering</span>, and applied mathematics.
-            I don't just train models — I ship intelligent systems that are both
-            technically rigorous and actually useful.
+            Builder obsessed with the fusion of <span className="hl-1">technical rigor</span> and{' '}
+            <span className="hl-2">applied intelligence</span>. I don't just train models,
+            I ship systems that leave a lasting impression.
           </p>
 
           {/* Academic log */}
@@ -117,8 +124,9 @@ export default function AboutSection() {
           ))}
 
           {/* Field operations */}
-          <div className="about-v2-subhead" style={{ marginTop: '18px' }}>
+          <div className="about-v2-subhead about-v2-subhead-marked">
             // FIELD_OPERATIONS [EXPERIENCES]
+            <span className="about-v2-marker">▲</span>
           </div>
           {EXPERIENCES.map((x) => (
             <div className="about-v2-record" key={x.org}>
