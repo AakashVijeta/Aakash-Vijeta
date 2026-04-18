@@ -37,21 +37,40 @@ body::before {
   content: '';
   position: fixed;
   inset: 0;
-  background: repeating-linear-gradient(
-    0deg,
-    transparent,
-    transparent 2px,
-    rgba(0, 0, 0, 0.15) 2px,
-    rgba(0, 0, 0, 0.15) 4px
-  );
+  background:
+    repeating-linear-gradient(
+      0deg,
+      rgba(0, 255, 65, 0.04) 0px,
+      rgba(0, 255, 65, 0.04) 1px,
+      transparent 1px,
+      transparent 3px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0, 0, 0, 0.35) 2px,
+      rgba(0, 0, 0, 0.35) 4px
+    );
   pointer-events: none;
   z-index: 9998;
   opacity: 1;
   transition: opacity 0.4s;
 }
 
+:root:not([data-theme="f1"]) body::before {
+  animation: crt-flicker 3.5s infinite steps(2);
+}
+
+@keyframes crt-flicker {
+  0%, 97%, 100% { opacity: 1; }
+  98% { opacity: 0.85; }
+  99% { opacity: 1; }
+}
+
 [data-theme="f1"] body::before {
-  opacity: 0;
+  opacity: 0 !important;
+  animation: none !important;
 }
 
 body::after {
@@ -70,14 +89,19 @@ body::after {
 }
 
 /* ── F1: carbon fiber background ─────────────────────────────── */
-[data-theme="f1"] .App {
-  background-color: var(--color-bg);
+[data-theme="f1"] .App,
+[data-theme="f1"] .section {
+  background-color: #0a0a0a;
   background-image: repeating-linear-gradient(
     45deg,
-    transparent,
+    rgba(255, 255, 255, 0.04) 0px,
+    rgba(255, 255, 255, 0.04) 1px,
+    transparent 1px,
+    transparent 3px,
+    rgba(0, 0, 0, 0.5) 3px,
+    rgba(0, 0, 0, 0.5) 4px,
     transparent 4px,
-    rgba(255, 255, 255, 0.015) 4px,
-    rgba(255, 255, 255, 0.015) 5px
+    transparent 6px
   );
 }
 

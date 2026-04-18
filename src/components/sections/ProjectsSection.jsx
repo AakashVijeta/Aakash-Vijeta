@@ -1,196 +1,88 @@
 import { useSectionContext } from '../../context/SectionContext';
 import { projectDetails } from '../../data/projects';
 
-const STATUSES = ['DEPLOYED', 'ACTIVE'];
-const CLASSIFICATIONS = ['CASE', 'FILE'];
+const CLASSIFIED_SLOTS = [
+  { slug: '__c1', codename: 'CLASSIFIED', tag: 'REDACTED' },
+  { slug: '__c2', codename: 'CLASSIFIED', tag: 'REDACTED' },
+  { slug: '__c3', codename: 'CLASSIFIED', tag: 'REDACTED' },
+];
 
 export default function ProjectsSection() {
   const { setOverlayProject } = useSectionContext();
+  const cards = [...projectDetails, ...CLASSIFIED_SLOTS];
 
   return (
     <section
-      className="section section-stripe"
+      className="section section-stripe evidence-board"
       style={{
         flexDirection: 'column',
         alignItems: 'stretch',
-        padding: '56px 48px 48px',
+        padding: '48px 56px',
         overflow: 'hidden',
       }}
     >
-      {/* Header + classification stamp */}
-      <div
-        className="section-enter-item"
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'baseline',
-          marginBottom: '28px',
-          flexShrink: 0,
-        }}
-      >
-        <div style={{
-          fontFamily: 'var(--font-display)',
-          fontSize: '0.7rem',
-          letterSpacing: '0.45em',
-          color: 'var(--color-accent)',
-          textTransform: 'uppercase',
-        }}>
-          Case Files
-          <div className="speed-line" />
+      <div className="evidence-wrap">
+        {/* TOP BAR */}
+        <div className="evidence-topbar section-enter-item">
+          <div className="evidence-title">
+            EVIDENCE BOARD
+            <div className="speed-line" />
+          </div>
+          <div className="evidence-topmeta">
+            <div>SECTION 002</div>
+            <div>//  FIELD_RECORDS</div>
+          </div>
         </div>
-        <div style={{
-          fontFamily: 'var(--font-display)',
-          fontSize: '0.6rem',
-          letterSpacing: '0.35em',
-          color: 'var(--color-muted)',
-          textTransform: 'uppercase',
-        }}>
-          CLASSIFICATION · PUBLIC · {projectDetails.length.toString().padStart(2, '0')} FILES
+
+        {/* CARD ROW */}
+        <div className="evidence-row section-enter-item">
+          {cards.map((p, i) => {
+            const isClassified = p.slug.startsWith('__');
+            const caseNo = (i + 1).toString().padStart(2, '0');
+            return (
+              <button
+                key={p.slug}
+                className={`evidence-card ${isClassified ? 'evidence-card-classified' : ''}`}
+                onClick={() => !isClassified && setOverlayProject(p)}
+                disabled={isClassified}
+              >
+                <div className="evidence-card-top">
+                  <span className="evidence-card-case">CASE / {caseNo}</span>
+                  <span className={`evidence-card-dot ${isClassified ? 'dot-red' : ''}`} />
+                </div>
+
+                <div className="evidence-card-media">
+                  {!isClassified && <img src={p.image} alt={p.title} />}
+                  {isClassified && (
+                    <div className="evidence-classified-stamp">
+                      <span>CLASSIFIED</span>
+                      <span>████████</span>
+                    </div>
+                  )}
+                  <div className="evidence-card-bracket tl" />
+                  <div className="evidence-card-bracket tr" />
+                  <div className="evidence-card-bracket bl" />
+                  <div className="evidence-card-bracket br" />
+                </div>
+
+                <div className="evidence-card-meta">
+                  <span className="evidence-card-tag">{p.tag}</span>
+                  <span className="evidence-card-cta">{isClassified ? 'LOCKED' : 'ENTER_FILE →'}</span>
+                </div>
+
+                <div className="evidence-card-name">
+                  {isClassified ? p.codename : p.title}
+                </div>
+              </button>
+            );
+          })}
         </div>
-      </div>
 
-      <div
-        style={{
-          flex: 1,
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))',
-          gap: '28px',
-          alignContent: 'start',
-        }}
-      >
-        {projectDetails.map((project, i) => {
-          const caseNo = (i + 1).toString().padStart(2, '0');
-          const status = STATUSES[i % STATUSES.length];
-          const classification = CLASSIFICATIONS[i % CLASSIFICATIONS.length];
-          return (
-            <button
-              key={project.slug}
-              className="project-card section-enter-item"
-              onClick={() => setOverlayProject(project)}
-              style={{
-                all: 'unset',
-                cursor: 'pointer',
-                display: 'flex',
-                flexDirection: 'column',
-                background: 'var(--color-surface)',
-                border: '1px solid var(--color-border)',
-                overflow: 'hidden',
-                transition: 'transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s',
-                position: 'relative',
-              }}
-            >
-              {/* Top metadata strip */}
-              <div style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                padding: '10px 16px',
-                borderBottom: '1px solid var(--color-border)',
-                fontFamily: 'var(--font-display)',
-                fontSize: '0.55rem',
-                letterSpacing: '0.3em',
-                color: 'var(--color-muted)',
-                textTransform: 'uppercase',
-              }}>
-                <span style={{ color: 'var(--color-accent)' }}>
-                  {classification} / {caseNo}
-                </span>
-                <span className="project-card-status">
-                  <span className="project-card-dot" /> {status}
-                </span>
-              </div>
-
-              {/* Full-bleed screenshot */}
-              <div style={{
-                width: '100%',
-                aspectRatio: '16/9',
-                overflow: 'hidden',
-                background: 'var(--color-bg)',
-                position: 'relative',
-              }}>
-                <img
-                  src={project.image}
-                  alt={project.title}
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'cover',
-                    display: 'block',
-                    transition: 'transform 0.4s ease',
-                  }}
-                />
-                {/* Corner brackets on image */}
-                <div className="project-card-bracket project-card-bracket-tl" />
-                <div className="project-card-bracket project-card-bracket-br" />
-              </div>
-
-              {/* Body */}
-              <div style={{ padding: '18px 20px 16px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                <div style={{
-                  fontFamily: 'var(--font-display)',
-                  fontSize: '0.58rem',
-                  letterSpacing: '0.35em',
-                  color: 'var(--color-accent)',
-                  textTransform: 'uppercase',
-                }}>
-                  {project.tag}
-                </div>
-                <div style={{
-                  fontFamily: 'var(--font-display)',
-                  fontSize: 'clamp(1.1rem, 1.6vw, 1.45rem)',
-                  letterSpacing: '0.02em',
-                  color: 'var(--color-text)',
-                  textTransform: 'uppercase',
-                  lineHeight: 1.15,
-                  fontWeight: 700,
-                }}>
-                  {project.title}
-                </div>
-                <div style={{
-                  fontFamily: 'var(--font-body)',
-                  fontSize: '0.8rem',
-                  color: 'var(--color-muted)',
-                  lineHeight: 1.55,
-                  overflow: 'hidden',
-                  display: '-webkit-box',
-                  WebkitLineClamp: 2,
-                  WebkitBoxOrient: 'vertical',
-                }}>
-                  {project.subtitle}
-                </div>
-
-                {/* Tech chips */}
-                <div style={{
-                  display: 'flex',
-                  flexWrap: 'wrap',
-                  gap: '6px',
-                  marginTop: '4px',
-                }}>
-                  {project.techStack.slice(0, 4).map((tech) => (
-                    <span key={tech} style={{
-                      fontFamily: 'var(--font-display)',
-                      fontSize: '0.55rem',
-                      letterSpacing: '0.2em',
-                      color: 'var(--color-muted)',
-                      border: '1px solid var(--color-border)',
-                      padding: '3px 7px',
-                      textTransform: 'uppercase',
-                    }}>
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              {/* Footer CTA */}
-              <div className="project-card-cta">
-                <span className="project-card-cta-terminal">&gt; DECRYPT FILE</span>
-                <span className="project-card-cta-f1">OPEN TELEMETRY</span>
-                <span className="project-card-cta-arrow">→</span>
-              </div>
-            </button>
-          );
-        })}
+        {/* BOTTOM BAR */}
+        <div className="evidence-bottom section-enter-item">
+          <span>{projectDetails.length.toString().padStart(2, '0')} ACTIVE · {CLASSIFIED_SLOTS.length.toString().padStart(2, '0')} CLASSIFIED</span>
+          <span>◁  SCROLL · NAVIGATE  ▷</span>
+        </div>
       </div>
     </section>
   );

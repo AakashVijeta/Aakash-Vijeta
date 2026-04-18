@@ -7,7 +7,6 @@ import IntroSection from './components/sections/IntroSection';
 import ProjectsSection from './components/sections/ProjectsSection';
 import AboutSection from './components/sections/AboutSection';
 import ContactSection from './components/sections/ContactSection';
-import CreditsSection from './components/sections/CreditsSection';
 import './App.css';
 
 const SECTION_COMPONENTS = [
@@ -15,7 +14,6 @@ const SECTION_COMPONENTS = [
   ProjectsSection,
   AboutSection,
   ContactSection,
-  CreditsSection,
 ];
 
 function App() {

@@ -1,5 +1,3 @@
-const BASE = import.meta.env.BASE_URL;
-
 const CORE_SKILLS = [
   'Python', 'React',
   'FastAPI', 'TypeScript',
@@ -53,13 +51,13 @@ export default function AboutSection() {
       className="section section-stripe about-v2"
       style={{
         flexDirection: 'column',
-        alignItems: 'stretch',
-        justifyContent: 'flex-start',
-        padding: '32px 48px 32px',
-        gap: '20px',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '32px 48px',
         overflow: 'hidden',
       }}
     >
+     <div className="about-v2-wrap">
       {/* TOP BAR */}
       <div className="about-v2-topbar section-enter-item">
         <div className="about-v2-title">SUBJECT PROFILE</div>
@@ -75,8 +73,12 @@ export default function AboutSection() {
         {/* LEFT COLUMN */}
         <aside className="about-v2-left section-enter-item">
           <div className="about-v2-subjectname">AAKASH VIJETA</div>
-          <div className="about-v2-photo">
-            <img src={BASE + 'profile.png'} alt="Aakash Vijeta" />
+          <div className="about-v2-photo about-v2-photo-placeholder">
+            <div className="about-v2-photo-placeholder-inner">
+              <span className="about-v2-photo-placeholder-icon">◐</span>
+              <span className="about-v2-photo-placeholder-label">IMAGE</span>
+              <span className="about-v2-photo-placeholder-sub">PENDING</span>
+            </div>
             <div className="about-v2-photo-bracket tl" />
             <div className="about-v2-photo-bracket tr" />
             <div className="about-v2-photo-bracket bl" />
@@ -163,6 +165,7 @@ export default function AboutSection() {
           </div>
         </aside>
       </div>
+     </div>
     </section>
   );
 }
