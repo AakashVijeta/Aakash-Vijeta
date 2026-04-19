@@ -27,6 +27,9 @@
   }
 }
 
+/* Hide native cursor — replaced by CustomCursor */
+*, *::before, *::after { cursor: none !important; }
+
 /* Smooth hover micro-transitions on all links and buttons.
    Doesn't add hover effects — only smooths whatever is already defined. */
 a,
@@ -61,18 +64,15 @@ button {
   display: none;
 }
 
-[data-theme="f1"] .navbar > .container {
-  position: relative;
-}
-
 [data-theme="f1"] .race-lights {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  position: absolute;
+  position: fixed;
+  top: 20px;
   left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
+  transform: translateX(-50%);
+  z-index: 500;
   padding: 6px 12px;
   background: linear-gradient(180deg, #0b0406 0%, #140608 100%);
   border: 1px solid rgba(225, 6, 0, 0.35);
@@ -214,7 +214,7 @@ button {
 [data-theme="f1"] .spotlight-tech li,
 [data-theme="f1"] .spotlight-tag,
 [data-theme="f1"] .project-detail-tag {
-  font-family: "SF Mono", Consolas, Menlo, monospace;
+  font-family: var(--font-mono);
   letter-spacing: 1px;
 }
 
@@ -287,6 +287,88 @@ button {
       transparent 2px 4px
     );
   border-left-color: var(--accent);
+}
+
+/* ================================================================
+   Nav Dots
+   ================================================================ */
+.nav-dot-btn {
+  all: unset;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 0;
+  position: relative;
+}
+
+.nav-dot-label {
+  font-family: var(--font-mono);
+  font-size: 0.48rem;
+  letter-spacing: 0.2em;
+  color: var(--color-muted);
+  opacity: 0;
+  transform: translateX(6px);
+  transition: opacity 0.2s, transform 0.2s;
+  text-transform: uppercase;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.nav-dot-btn:hover .nav-dot-label,
+.nav-dot-btn--active .nav-dot-label {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.nav-dot-btn--active .nav-dot-label {
+  color: var(--color-accent);
+}
+
+.nav-dot-track {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  position: relative;
+}
+
+/* outer ring on active */
+.nav-dot-btn--active .nav-dot-track::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 1px solid var(--color-accent);
+  border-radius: 50%;
+  opacity: 0.5;
+}
+
+.nav-dot-pip {
+  display: block;
+  width: 4px;
+  height: 4px;
+  background: var(--color-muted);
+  border-radius: 50%;
+  transition: background 0.25s, box-shadow 0.25s, transform 0.25s;
+  opacity: 0.45;
+}
+
+.nav-dot-btn:hover .nav-dot-pip {
+  background: var(--color-text);
+  opacity: 0.8;
+  transform: scale(1.2);
+}
+
+.nav-dot-btn--active .nav-dot-pip {
+  background: var(--color-accent);
+  opacity: 1;
+  box-shadow: 0 0 6px var(--color-accent);
+  transform: scale(1.3);
+}
+
+@media (max-width: 720px) {
+  .nav-dot-label { display: none; }
 }
 
 /* ================================================================

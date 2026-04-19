@@ -23,7 +23,7 @@ export default function ProjectOverlay() {
     <div
       onClick={() => setOverlayProject(null)}
       style={{
-        position: 'fixed', inset: 0, zIndex: 5000,
+        position: 'fixed', inset: 0, zIndex: 10001,
         background: 'rgba(0,0,0,0.92)',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         padding: '20px',
@@ -91,11 +91,14 @@ export default function ProjectOverlay() {
             <a href={p.liveDemo} target="_blank" rel="noopener noreferrer"
               style={{
                 fontFamily: 'var(--font-display)', fontSize: '0.7rem',
-                letterSpacing: '0.2em', color: 'var(--color-bg)',
-                background: 'var(--color-accent)', padding: '6px 14px',
+                fontWeight: 700,
+                letterSpacing: '0.2em', color: 'var(--color-white)',
+                background: 'transparent',
+                border: '1px solid var(--color-white)',
+                padding: '6px 14px',
                 textDecoration: 'none', textTransform: 'uppercase',
               }}>
-              Live Demo
+              Live Demo →
             </a>
           )}
         </div>

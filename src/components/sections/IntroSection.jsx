@@ -40,19 +40,18 @@ export default function IntroSection({ isActive }) {
         flexDirection: 'column',
         alignItems: 'stretch',
         justifyContent: 'space-between',
-        padding: '64px 6vw 56px',
+        padding: '64px clamp(40px, 5vw, 80px) 56px',
         position: 'relative',
       }}
     >
       {/* Top classification bar */}
       <div className="intro-top-bar">
         <span className="intro-stamp" style={{ color: 'var(--color-accent)' }}>
-          <span className="intro-dot" /> CLASSIFICATION · PUBLIC
+          <span className="intro-dot" /> CLEARANCE · UNRESTRICTED
         </span>
-        <span className="intro-stamp">SIG · AV-07</span>
-        <span className="intro-stamp">BUILD · 2026.04</span>
-        <span className="intro-stamp intro-stamp-f1">TEAM · AAKASH RACING</span>
-        <span className="intro-stamp intro-stamp-terminal">SESSION · CRT-ONLINE</span>
+        <span className="intro-stamp">REF · AV-07</span>
+        <span className="intro-stamp intro-stamp-f1">AFFILIATION · INDEPENDENT</span>
+        <span className="intro-stamp intro-stamp-terminal">TERMINAL · ACTIVE</span>
       </div>
 
       {/* Giant name-mark with dossier rail */}
@@ -70,7 +69,7 @@ export default function IntroSection({ isActive }) {
           <div className="intro-dossier-line"><span>NAME</span><span>AAKASH VIJETA</span></div>
           <div className="intro-dossier-line"><span>ROLE</span><span>ENGINEER / BUILDER</span></div>
           <div className="intro-dossier-line"><span>BASE</span><span>IIT GUWAHATI · IND</span></div>
-          <div className="intro-dossier-line"><span>STACK</span><span>ML · SYSTEMS · APPLIED MATH</span></div>
+          <div className="intro-dossier-line"><span>STACK</span><span>ML · AI SYSTEMS · DATA SCIENCE</span></div>
           <div className="intro-dossier-line"><span>STATUS</span><span className="intro-status-live">ON TRACK</span></div>
         </aside>
       </div>
@@ -84,7 +83,7 @@ export default function IntroSection({ isActive }) {
           color: 'var(--color-muted)',
           textTransform: 'uppercase',
         }}>
-          COORD · 26.14°N · 91.65°E
+          LOCATION · 26.14°N 91.65°E · INDIA
         </div>
         <div className="intro-meta-row" style={{
           fontFamily: 'var(--font-display)',
@@ -93,7 +92,7 @@ export default function IntroSection({ isActive }) {
           color: 'var(--color-muted)',
           textTransform: 'uppercase',
         }}>
-          SCROLL · NAVIGATE
+          USE ARROW KEYS OR SCROLL TO NAVIGATE
         </div>
       </div>
     </section>

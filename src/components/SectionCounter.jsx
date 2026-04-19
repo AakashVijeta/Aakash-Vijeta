@@ -7,7 +7,7 @@ export default function SectionCounter() {
   return (
     <div style={{
       position: 'fixed',
-      top: '20px',
+      top: '28px',
       right: '24px',
       fontFamily: 'var(--font-display)',
       fontSize: '11px',
@@ -17,7 +17,8 @@ export default function SectionCounter() {
       userSelect: 'none',
     }} className="section-counter">
       <span style={{ color: 'var(--color-accent)' }}>{pad(activeIndex + 1)}</span>
-      <span>/{pad(total)}</span>
+      <span style={{ margin: '0 4px' }}>/</span>
+      <span>{pad(total)}</span>
     </div>
   );
 }

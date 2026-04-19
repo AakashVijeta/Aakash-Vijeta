@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useCallback } from 'react';
+import { createContext, useContext, useState, useCallback, useRef } from 'react';
 
 const SectionContext = createContext(null);
 
@@ -8,10 +8,16 @@ export function SectionProvider({ children }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [overlayProject, setOverlayProject] = useState(null);
+  const navigateToRef = useRef(null);
 
   const goTo = useCallback((index) => {
     if (index < 0 || index >= SECTIONS.length) return;
     setActiveIndex(index);
+  }, []);
+
+  // Called by NavDots — routes through SectionManager's full transition logic
+  const navigateTo = useCallback((index) => {
+    if (navigateToRef.current) navigateToRef.current(index);
   }, []);
 
   return (
@@ -22,6 +28,8 @@ export function SectionProvider({ children }) {
       overlayProject,
       setOverlayProject,
       goTo,
+      navigateTo,
+      navigateToRef,
       total: SECTIONS.length,
     }}>
       {children}

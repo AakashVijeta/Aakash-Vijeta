@@ -1,77 +1,58 @@
-.theme-toggle {
+.mode-switch {
   position: fixed;
-  bottom: 20px;
-  left: 24px;
+  bottom: 18px;
+  right: 18px;
   z-index: 1000;
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 6px 12px 6px 8px;
-  background-color: var(--color-surface);
+  gap: 6px;
+  padding: 5px 9px;
+  background-color: color-mix(in srgb, var(--color-bg) 80%, transparent);
+  backdrop-filter: blur(3px);
   border: 1px solid var(--color-border);
-  border-radius: 3px;
-  font-family: var(--font-display);
-  font-size: 9px;
-  letter-spacing: 0.2em;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.15em;
   color: var(--color-muted);
+  user-select: none;
+}
+
+.mode-switch-key {
+  color: var(--color-muted);
+  opacity: 0.7;
+  padding-right: 2px;
+  border-right: 1px solid var(--color-border);
+  margin-right: 2px;
+}
+
+.mode-switch-div {
+  color: var(--color-border);
+}
+
+.mode-seg {
+  all: unset;
   cursor: pointer;
-  transition: color 0.2s, border-color 0.2s;
+  padding: 2px 5px;
+  color: var(--color-muted);
+  transition: color 0.2s, background-color 0.2s;
 }
 
-.theme-toggle:hover {
-  color: var(--color-accent);
-  border-color: var(--color-accent);
+.mode-seg:hover {
+  color: var(--color-text);
 }
 
-.theme-toggle--f1 {
-  border-color: var(--color-accent);
-  color: var(--color-accent);
-}
-
-/* Mini checkered flag */
-.theme-toggle-flag {
-  display: grid;
-  grid-template-columns: repeat(3, 4px);
-  grid-template-rows: repeat(2, 4px);
-  gap: 1px;
-  overflow: hidden;
-}
-
-.theme-toggle-flag span {
-  display: block;
-  background-color: var(--color-muted);
-}
-
-.theme-toggle-flag span:nth-child(2),
-.theme-toggle-flag span:nth-child(4),
-.theme-toggle-flag span:nth-child(6) {
-  background-color: transparent;
-}
-
-.theme-toggle--f1 .theme-toggle-flag span {
+.mode-seg--active {
+  color: var(--color-bg);
   background-color: var(--color-accent);
+  font-weight: 700;
 }
 
-.theme-toggle--f1 .theme-toggle-flag span:nth-child(2),
-.theme-toggle--f1 .theme-toggle-flag span:nth-child(4),
-.theme-toggle--f1 .theme-toggle-flag span:nth-child(6) {
-  background-color: transparent;
-}
-
-.theme-toggle-label {
-  white-space: nowrap;
-  text-transform: uppercase;
-}
-
-@media (max-width: 768px) {
-  .theme-toggle {
-    bottom: 14px;
-    left: 14px;
-    font-size: 8px;
-    padding: 5px 10px 5px 6px;
+@media (max-width: 720px) {
+  .mode-switch {
+    bottom: 12px;
+    right: 12px;
+    font-size: 9px;
+    padding: 4px 7px;
   }
-
-  .theme-toggle-label {
-    display: none;
-  }
+  .mode-switch-key { display: none; }
 }

@@ -1,61 +1,213 @@
-.preloader {
+.pl {
   position: fixed;
   inset: 0;
-  z-index: 10001;
-  background: var(--navy);
+  z-index: 99998;
+  overflow: hidden;
+}
+.pl--exit {
+  pointer-events: none;
+}
+
+/* Two halves that ARE the dark bg — slide away from center on exit */
+.pl-curtain-t,
+.pl-curtain-b {
+  position: absolute;
+  left: 0;
+  right: 0;
+  background: var(--color-bg);
+  z-index: 0;
+}
+.pl-curtain-t { top: 0;    height: 50%; }
+.pl-curtain-b { bottom: 0; height: 50%; }
+
+/* All HUD content sits above the curtains */
+.pl-content {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+/* ── Scan box outline ── */
+.pl-scan-box {
+  position: absolute;
+  top: calc(44% - 65px);
+  left: 12vw;
+  right: 12vw;
+  height: 130px;
+  border: 1px solid color-mix(in srgb, var(--color-accent) 22%, transparent);
+  pointer-events: none;
+}
+
+/* ── Corner brackets ── */
+.pl-corner {
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  pointer-events: none;
+}
+.pl-corner--tl { top: calc(44% - 65px); left: 12vw;  border-top:    1px solid var(--color-accent); border-left:   1px solid var(--color-accent); }
+.pl-corner--br { top: calc(44% + 37px); right: 12vw; border-bottom: 1px solid var(--color-accent); border-right:  1px solid var(--color-accent); }
+
+/* ── Top-right HUD ── */
+.pl-hud-tr {
+  position: absolute;
+  top: 78px;
+  right: 80px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 40px;
-  transition: opacity 0.6s ease, transform 0.6s ease;
+  gap: 10px;
 }
-
-.preloader.is-exiting {
-  opacity: 0;
-  transform: translateY(-20px);
-}
-
-.preloader-inner {
-  display: flex;
-  gap: 18px;
-  overflow: hidden;
-}
-
-.preloader-word {
-  font-family: "NTR", sans-serif;
-  font-size: clamp(48px, 10vw, 120px);
-  font-weight: bold;
-  color: var(--lightest-slate);
-  display: inline-block;
-  transform: translateY(110%);
-  animation: preloaderReveal 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-  animation-delay: calc(var(--i) * 0.12s + 0.2s);
-}
-
-@keyframes preloaderReveal {
-  to { transform: translateY(0); }
-}
-
-.preloader-bar {
-  width: 240px;
-  height: 2px;
-  background: var(--lightest-navy);
-  overflow: hidden;
+.pl-radar {
   position: relative;
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  border: 1px solid var(--color-border);
+  overflow: hidden;
+  flex-shrink: 0;
 }
-
-.preloader-bar::after {
-  content: "";
+/* Sweep wedge — solid slice with gradient fade */
+.pl-radar-sweep {
   position: absolute;
   inset: 0;
-  background: var(--accent);
-  transform-origin: left;
-  transform: scaleX(0);
-  animation: preloaderFill 1.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-  animation-delay: 0.3s;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 0deg,
+    var(--color-accent)                                          0deg,
+    color-mix(in srgb, var(--color-accent) 55%, transparent)   20deg,
+    color-mix(in srgb, var(--color-accent) 20%, transparent)   42deg,
+    transparent                                                 60deg,
+    transparent                                                360deg
+  );
+  animation: pl-sweep 2s linear infinite;
+}
+@keyframes pl-sweep {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+.pl-badge {
+  font-family: var(--font-display);
+  font-size: 0.68rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--color-bg);
+  background: var(--color-accent);
+  padding: 4px 12px;
+}
+.pl-badge--ok {
+  background: transparent;
+  color: #fff;
+  border: 1px solid #fff;
 }
 
-@keyframes preloaderFill {
-  to { transform: scaleX(1); }
+/* ── Freq label ── */
+.pl-freq-label {
+  position: absolute;
+  top: -22px;
+  left: 50%;
+  transform: translateX(-20%);
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.2em;
+  color: var(--color-accent);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* ── Center signal line ── */
+.pl-centerline {
+  position: absolute;
+  top: calc(44% - 30px);
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.pl-signal-wrap {
+  position: absolute;
+  left: 0; right: 0; top: 0;
+  height: 60px;
+  overflow: hidden;
+}
+.pl-signal-svg {
+  display: block;
+  will-change: transform;
+}
+.pl-signal-path {
+  fill: none;
+  stroke: var(--color-accent);
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+  filter: drop-shadow(0 0 3px var(--color-accent)) drop-shadow(0 0 6px color-mix(in srgb, var(--color-accent) 50%, transparent));
+}
+.pl-status-label {
+  position: relative;
+  z-index: 1;
+  top: 15px;
+  font-family: var(--font-display);
+  font-size: 0.62rem;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--color-text);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  padding: 5px 18px;
+  white-space: nowrap;
+  transition: background 0.4s, color 0.4s, border-color 0.4s;
+}
+.pl-status-label--done {
+  background: var(--color-accent);
+  color: var(--color-bg);
+  border-color: var(--color-accent);
+}
+
+/* ── Percentage ── */
+.pl-pct-wrap {
+  position: absolute;
+  top: calc(44% + 28px);
+  left: 0; right: 0;
+  display: flex;
+  justify-content: center;
+}
+.pl-pct {
+  font-family: var(--font-display);
+  font-size: clamp(60px, 10vw, 120px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--color-white, #fff);
+  line-height: 1;
+}
+
+/* ── Bottom log ── */
+.pl-log {
+  position: absolute;
+  bottom: calc(50% - 160px);
+  left: 15vw;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  padding-left: 14px;
+}
+.pl-log::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: linear-gradient(to bottom, transparent, var(--color-accent));
+}
+.pl-log-line {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  color: var(--color-muted);
+  opacity: 0;
+  animation: pl-log-in 0.2s ease forwards;
+}
+@keyframes pl-log-in {
+  from { opacity: 0; transform: translateX(-4px); }
+  to   { opacity: 1; transform: translateX(0); }
 }

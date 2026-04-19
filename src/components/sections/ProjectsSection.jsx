@@ -13,76 +13,76 @@ export default function ProjectsSection() {
 
   return (
     <section
-      className="section section-stripe evidence-board"
-      style={{
-        flexDirection: 'column',
-        alignItems: 'stretch',
-        padding: '48px 56px',
-        overflow: 'hidden',
-      }}
+      className="section section-stripe projects-section"
+      style={{ flexDirection: 'column', alignItems: 'stretch', padding: 0, overflow: 'hidden' }}
     >
-      <div className="evidence-wrap">
-        {/* TOP BAR */}
-        <div className="evidence-topbar section-enter-item">
-          <div className="evidence-title">
+      <header className="projects-topbar section-enter-item">
+        <div className="projects-topbar-row">
+          <div className="projects-title">
             EVIDENCE BOARD
             <div className="speed-line" />
           </div>
-          <div className="evidence-topmeta">
+          <div className="projects-topmeta">
             <div>SECTION 002</div>
-            <div>//  FIELD_RECORDS</div>
+            <div>// FIELD_RECORDS</div>
           </div>
         </div>
+        <hr className="profiler-rule" />
+      </header>
 
-        {/* CARD ROW */}
-        <div className="evidence-row section-enter-item">
-          {cards.map((p, i) => {
-            const isClassified = p.slug.startsWith('__');
-            const caseNo = (i + 1).toString().padStart(2, '0');
-            return (
-              <button
-                key={p.slug}
-                className={`evidence-card ${isClassified ? 'evidence-card-classified' : ''}`}
-                onClick={() => !isClassified && setOverlayProject(p)}
-                disabled={isClassified}
-              >
-                <div className="evidence-card-top">
-                  <span className="evidence-card-case">CASE / {caseNo}</span>
-                  <span className={`evidence-card-dot ${isClassified ? 'dot-red' : ''}`} />
+      <div className="projects-list section-enter-item">
+        {cards.map((p, i) => {
+          const isClassified = p.slug.startsWith('__');
+          const caseNo = (i + 1).toString().padStart(2, '0');
+          return (
+            <button
+              key={p.slug}
+              className={`project-strip ${isClassified ? 'project-strip-classified' : ''}`}
+              onClick={() => !isClassified && setOverlayProject(p)}
+              disabled={isClassified}
+            >
+              <div className="project-strip-inner">
+                <div className="corner tl" />
+                <div className="corner tr" />
+                <div className="corner bl" />
+                <div className="corner br" />
+
+                <div className="strip-visual">
+                  {!isClassified && <img src={p.image} alt={p.title} className="bg-img" loading="lazy" />}
+                  <div className="strip-scan-grid" />
+                  <div className="strip-scan-beam" />
                 </div>
 
-                <div className="evidence-card-media">
-                  {!isClassified && <img src={p.image} alt={p.title} />}
-                  {isClassified && (
-                    <div className="evidence-classified-stamp">
-                      <span>CLASSIFIED</span>
-                      <span>████████</span>
+                <div className="strip-content">
+                  <div className="strip-tech-header">
+                    <div className="strip-barcode" />
+                    <div className="strip-status">
+                      <span className="uppercase">{isClassified ? 'CLASSIFIED' : p.tag}</span>
+                      <div className="status-indicator" />
                     </div>
-                  )}
-                  <div className="evidence-card-bracket tl" />
-                  <div className="evidence-card-bracket tr" />
-                  <div className="evidence-card-bracket bl" />
-                  <div className="evidence-card-bracket br" />
-                </div>
+                  </div>
 
-                <div className="evidence-card-meta">
-                  <span className="evidence-card-tag">{p.tag}</span>
-                  <span className="evidence-card-cta">{isClassified ? 'LOCKED' : 'ENTER_FILE →'}</span>
+                  <div className="strip-details">
+                    <span className="strip-id">CASE #{caseNo}</span>
+                    <div className="strip-title-wrap">
+                      <h3 className="strip-title">
+                        {isClassified ? p.codename : p.title}
+                      </h3>
+                    </div>
+                    <div className="strip-access">
+                      [ {isClassified ? 'ACCESS DENIED' : 'CLICK TO DECRYPT'} ]
+                    </div>
+                  </div>
                 </div>
+              </div>
+            </button>
+          );
+        })}
+      </div>
 
-                <div className="evidence-card-name">
-                  {isClassified ? p.codename : p.title}
-                </div>
-              </button>
-            );
-          })}
-        </div>
-
-        {/* BOTTOM BAR */}
-        <div className="evidence-bottom section-enter-item">
-          <span>{projectDetails.length.toString().padStart(2, '0')} ACTIVE · {CLASSIFIED_SLOTS.length.toString().padStart(2, '0')} CLASSIFIED</span>
-          <span>◁  SCROLL · NAVIGATE  ▷</span>
-        </div>
+      <div className="projects-bottombar section-enter-item">
+        <span>{projectDetails.length.toString().padStart(2, '0')} ACTIVE · {CLASSIFIED_SLOTS.length.toString().padStart(2, '0')} CLASSIFIED</span>
+        <span>◁  HOVER · NAVIGATE  ▷</span>
       </div>
     </section>
   );

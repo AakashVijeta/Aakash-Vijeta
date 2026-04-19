@@ -45,7 +45,7 @@ const WipeTransition = forwardRef(function WipeTransition(_, ref) {
         position: 'fixed',
         inset: 0,
         background: '#e10600',
-        zIndex: 9999,
+        zIndex: 10000,
         display: 'none',
         pointerEvents: 'none',
       }}

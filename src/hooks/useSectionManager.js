@@ -1,7 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { Observer } from 'gsap/Observer';
 import gsap from 'gsap';
-import { SECTIONS } from '../context/SectionContext';
 
 gsap.registerPlugin(Observer);
 

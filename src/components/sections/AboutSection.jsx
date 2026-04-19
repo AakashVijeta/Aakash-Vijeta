@@ -1,6 +1,6 @@
-const CORE_SKILLS = [
-  'Python', 'React',
-  'FastAPI', 'TypeScript',
+const CORE_PRIMARY = ['Python', 'FastAPI'];
+const CORE_REST = [
+  'React', 'TypeScript',
   'scikit-learn', 'XGBoost',
   'PostgreSQL', 'Docker',
   'Pandas', 'NumPy',
@@ -8,8 +8,8 @@ const CORE_SKILLS = [
   'Node.js', 'SQL',
 ];
 
-const SOFT_SKILLS = [
-  'Problem Solving', 'Critical Thinking',
+const SOFT_PRIMARY = ['Problem Solving', 'Critical Thinking'];
+const SOFT_REST = [
   'Autonomy', 'Curiosity',
   'Collaboration', 'Creativity',
 ];
@@ -17,155 +17,191 @@ const SOFT_SKILLS = [
 const EDUCATION = [
   {
     org: 'IIT GUWAHATI',
-    range: '2023 - 2027',
-    line: 'BACHELOR - Data Science & Artificial Intelligence',
+    range: '2024 - 2028',
+    line: 'BACHELOR — Data Science & Artificial Intelligence',
   },
   {
-    org: 'SELF-TAUGHT',
-    range: '2018 - 2023',
-    line: 'FOUNDATIONS - Programming & Applied Mathematics',
+    org: 'SELF-DIRECTED',
+    range: '2021 - 2024',
+    line: 'Systems Programming, Statistical Learning & Applied Mathematics',
   },
 ];
 
 const EXPERIENCES = [
   {
     org: '[F1 PODIUM PREDICTOR]',
-    range: '2025 - 2026',
-    line: 'MACHINE LEARNING - Calibrated Probability Service',
+    range: '2026',
+    line: 'Gradient-boosted classifier with calibrated probability output & race-lifecycle state machine',
   },
   {
     org: '[NIFTYEDGE]',
-    range: '2025 - 2026',
-    line: 'QUANT RESEARCH - Walk-forward XGBoost Signals',
+    range: '2026',
+    line: 'Walk-forward XGBoost signal engine with sector momentum & volume-weighted feature construction',
   },
   {
-    org: '[8 YEARS PROGRAMMING]',
-    range: '2018 - 2026',
-    line: 'TOTAL_RUNTIME - Continuous Learning Protocol',
+    org: '[INDEPENDENT R&D]',
+    range: '2021 - PRESENT',
+    line: 'Continuous iteration across ML pipelines, backend systems, and quantitative research',
   },
 ];
 
 export default function AboutSection() {
   return (
     <section
-      className="section section-stripe about-v2"
+      className="section section-stripe about-profiler"
       style={{
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: '32px 48px',
+        padding: '28px clamp(32px, 4vw, 72px) 36px',
         overflow: 'hidden',
       }}
     >
-     <div className="about-v2-wrap">
-      {/* TOP BAR */}
-      <div className="about-v2-topbar section-enter-item">
-        <div className="about-v2-title">SUBJECT PROFILE</div>
-        <div className="about-v2-topmeta">
-          <div>CASE FILE: AV-03</div>
-          <div>STATUS: GRADUATING</div>
+      <header className="profiler-head section-enter-item">
+        <div className="profiler-head-row">
+          <h2 className="profiler-title">SUBJECT PROFILE</h2>
+          <div className="profiler-head-meta">
+            <div>REF: AV-01 · IIT GUWAHATI</div>
+            <div>STATUS: ACTIVE DEVELOPMENT</div>
+          </div>
         </div>
-      </div>
+        <hr className="profiler-rule" />
+      </header>
 
-      {/* 3-COLUMN GRID */}
-      <div className="about-v2-grid">
+      <div className="profiler-container">
 
-        {/* LEFT COLUMN */}
-        <aside className="about-v2-left section-enter-item">
-          <div className="about-v2-subjectname">AAKASH VIJETA</div>
-          <div className="about-v2-photo about-v2-photo-placeholder">
-            <div className="about-v2-photo-placeholder-inner">
-              <span className="about-v2-photo-placeholder-icon">◐</span>
-              <span className="about-v2-photo-placeholder-label">IMAGE</span>
-              <span className="about-v2-photo-placeholder-sub">PENDING</span>
+        {/* LEFT — IDENTITY */}
+        <div className="profiler-module col-identity section-enter-item">
+          <div className="identity-name">AAKASH VIJETA</div>
+
+          <div className="fingerprint-scanner">
+            <div className="scanner-frame-profile">
+              <div className="scanner-grid-overlay-profile" />
+              <div className="face-target-box-profile">
+                <div className="ft-corner-profile ft-tl" />
+                <div className="ft-corner-profile ft-tr" />
+                <div className="ft-corner-profile ft-bl" />
+                <div className="ft-corner-profile ft-br" />
+              </div>
+              <div className="scan-data-profile data-top-profile">REC_ACTIVE [●]</div>
+              <div className="scan-data-profile data-bot-profile">ISO_FACE_ID: 99.9%</div>
             </div>
-            <div className="about-v2-photo-bracket tl" />
-            <div className="about-v2-photo-bracket tr" />
-            <div className="about-v2-photo-bracket bl" />
-            <div className="about-v2-photo-bracket br" />
+            <div className="scan-beam" />
           </div>
-          <div className="about-v2-fields">
-            <div><span>CLASS</span><span>DEV_ML-FULLSTACK</span></div>
-            <div><span>N. LEVEL</span><span>BACHELOR_DEGREE</span></div>
-            <div><span>LVL_1</span><span>HI (Native)</span></div>
-            <div><span>LVL_2</span><span>EN (Fluent)</span></div>
-          </div>
-          <div className="about-v2-status-alert">
-            <span className="about-v2-status-chip">STATUS: ALERT</span>
-            <div className="about-v2-status-main">OPEN TO WORK</div>
-            <div className="about-v2-status-sub">
-              <span>2 PROJECTS SHIPPED</span>
-              <span>REMOTE_READY</span>
+
+          <div className="id-data-grid">
+            <div className="id-cell"><span className="id-key">DOMAIN:</span><span className="id-val">ML · QUANT · SYSTEMS</span></div>
+            <div className="id-cell"><span className="id-key">LEVEL:</span><span className="id-val">UNDERGRADUATE</span></div>
+            <div className="id-cell"><span className="id-key">LANG_1:</span><span className="id-val">Hindi (Native)</span></div>
+            <div className="id-cell"><span className="id-key">LANG_2:</span><span className="id-val">English (Fluent)</span></div>
+            <div className="status-wrapper">
+              <div className="status-bg-scroll" />
+              <div className="status-header">
+                <span className="status-dot" />
+                AVAILABILITY
+              </div>
+              <div className="status-main">OPEN TO WORK</div>
+              <div className="status-footer">
+                <span>// CONTRACTS: ENABLED</span>
+                <span>[REMOTE_READY]</span>
+              </div>
             </div>
           </div>
-        </aside>
+        </div>
 
-        {/* MIDDLE COLUMN */}
-        <div className="about-v2-mid section-enter-item">
-          <div className="about-v2-mid-header">
+        {/* MIDDLE — BEHAVIOR */}
+        <div className="profiler-module col-behavior section-enter-item">
+          <div className="analysis-header">
             <span>COMPETENCE_ANALYSIS_REPORT</span>
-            <span className="about-v2-readonly">[READ_ONLY]</span>
+            <span className="analysis-readonly">[READ_ONLY]</span>
           </div>
-
-          <p className="about-v2-bio">
-            Builder obsessed with the fusion of <span className="hl-1">technical rigor</span> and{' '}
-            <span className="hl-2">applied intelligence</span>. I don't just train models,
-            I ship systems that leave a lasting impression.
-          </p>
-
-          {/* Academic log */}
-          <div className="about-v2-subhead">// ACADEMIC_LOG [EDUCATION]</div>
-          {EDUCATION.map((e) => (
-            <div className="about-v2-record" key={e.org}>
-              <div className="about-v2-record-top">
-                <span className="about-v2-record-org">[{e.org}]</span>
-                <span className="about-v2-record-range">{e.range}</span>
+          <div className="psych-report">
+            <p className="psych-bio">
+              I build at the intersection of{' '}
+              <span className="hl-1">statistical inference</span> and{' '}
+              <span className="hl-2">production engineering</span>. My work goes beyond model accuracy —
+              I design the pipelines, state machines, and APIs that make predictions usable in the real world.
+            </p>
+            <div className="dossier-history">
+              <div className="history-block">
+                <h4 className="history-block-title">// ACADEMIC_LOG [EDUCATION]</h4>
+                {EDUCATION.map((e) => (
+                  <div className="history-item" key={e.org}>
+                    <div className="history-header">
+                      <span className="history-date">[{e.org}]</span>
+                      <span className="history-period">{e.range}</span>
+                    </div>
+                    <div className="history-line">{e.line}</div>
+                  </div>
+                ))}
               </div>
-              <div className="about-v2-record-line">{e.line}</div>
+              <div className="history-block">
+                <h4 className="history-block-title">// FIELD_OPERATIONS [EXPERIENCE]</h4>
+                {EXPERIENCES.map((x) => (
+                  <div className="history-item" key={x.org}>
+                    <div className="history-header">
+                      <span className="history-date">{x.org}</span>
+                      <span className="history-period">{x.range}</span>
+                    </div>
+                    <div className="history-line">{x.line}</div>
+                  </div>
+                ))}
+              </div>
             </div>
-          ))}
-
-          {/* Field operations */}
-          <div className="about-v2-subhead about-v2-subhead-marked">
-            // FIELD_OPERATIONS [EXPERIENCES]
-            <span className="about-v2-marker">▲</span>
           </div>
-          {EXPERIENCES.map((x) => (
-            <div className="about-v2-record" key={x.org}>
-              <div className="about-v2-record-top">
-                <span className="about-v2-record-org">{x.org}</span>
-                <span className="about-v2-record-range">{x.range}</span>
-              </div>
-              <div className="about-v2-record-line">{x.line}</div>
-            </div>
-          ))}
         </div>
 
-        {/* RIGHT COLUMN */}
-        <aside className="about-v2-right section-enter-item">
-          <div className="about-v2-right-header">SUBJECT_INVENTORY</div>
+        {/* RIGHT — CAPABILITIES */}
+        <div className="col-capabilities-wrapper section-enter-item">
+          <div className="profiler-module cap-top">
+            <div className="cap-inv-label">EQUIPMENT_INVENTORY</div>
 
-          <div className="about-v2-inv-label">CORE_SKILLS</div>
-          <div className="about-v2-chipgrid">
-            {CORE_SKILLS.map((s) => (
-              <span className="about-v2-chip" key={s}>{s}</span>
-            ))}
-          </div>
+            <div className="tech-category">
+              <span className="cat-title cat-accent">HARD SKILLS</span>
+              <hr className="cat-rule" />
+              <div className="chips-primary">
+                {CORE_PRIMARY.map((s) => (
+                  <div className="tech-chip tech-chip-primary" key={s}>{s}</div>
+                ))}
+              </div>
+              <div className="chips-grid">
+                {CORE_REST.map((s) => (
+                  <div className="tech-chip" key={s}>{s}</div>
+                ))}
+              </div>
+            </div>
 
-          <div className="about-v2-inv-label" style={{ marginTop: '18px' }}>SOFT_SKILLS</div>
-          <div className="about-v2-chipgrid">
-            {SOFT_SKILLS.map((s) => (
-              <span className="about-v2-chip" key={s}>{s}</span>
-            ))}
-          </div>
+            <div className="tech-category">
+              <span className="cat-title cat-accent">SOFT SKILLS</span>
+              <hr className="cat-rule" />
+              <div className="chips-primary">
+                {SOFT_PRIMARY.map((s) => (
+                  <div className="tech-chip tech-chip-primary" key={s}>{s}</div>
+                ))}
+              </div>
+              <div className="chips-grid">
+                {SOFT_REST.map((s) => (
+                  <div className="tech-chip" key={s}>{s}</div>
+                ))}
+              </div>
+            </div>
 
-          <div className="about-v2-danger">
-            <div className="about-v2-danger-icon">▲</div>
-            <div className="about-v2-danger-label">DANGER: HIGH</div>
+            <div className="threat-level cap-inner-threat">
+              <div className="alert-box">
+                <svg className="alert-svg" viewBox="0 0 100 100">
+                  <path className="triangle-bg" d="M50,15 L90,85 L10,85 Z" />
+                  <path className="triangle-outline" d="M50,15 L90,85 L10,85 Z" />
+                  <path className="triangle-line" d="M50,15 L90,85 L10,85 Z" />
+                  <rect className="alert-mark-bar" x="48" y="35" width="4" height="25" />
+                  <circle className="alert-mark-dot" cx="50" cy="72" r="3" />
+                </svg>
+              </div>
+              <div className="danger-label">DANGER: HIGH</div>
+            </div>
           </div>
-        </aside>
+        </div>
+
       </div>
-     </div>
     </section>
   );
 }

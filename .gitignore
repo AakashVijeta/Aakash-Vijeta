@@ -40,6 +40,7 @@ Thumbs.db
 # Claude Code / AI tooling
 .claude/
 CLAUDE.md
+.superpowers/
 
 # Graphify knowledge graph (local-only artifacts)
 graphify-out/

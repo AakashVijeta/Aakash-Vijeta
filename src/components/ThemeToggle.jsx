@@ -21,7 +21,6 @@ const ThemeToggle = () => {
     window.localStorage.setItem(STORAGE_KEY, theme);
   }, [theme]);
 
-  // Sync when T key toggles theme externally (via useSectionManager)
   useEffect(() => {
     const observer = new MutationObserver(() => {
       const attr = document.documentElement.getAttribute("data-theme");
@@ -33,30 +32,27 @@ const ThemeToggle = () => {
 
   const isF1 = theme === "f1";
 
-  const handleToggle = () => {
-    setTheme(isF1 ? "default" : "f1");
-  };
-
   return (
-    <button
-      type="button"
-      className={`theme-toggle ${isF1 ? "theme-toggle--f1" : ""}`}
-      onClick={handleToggle}
-      aria-label={isF1 ? "Switch to Terminal theme" : "Switch to F1 theme"}
-      title={isF1 ? "Terminal mode" : "F1 mode"}
-    >
-      <span className="theme-toggle-flag" aria-hidden="true">
-        <span />
-        <span />
-        <span />
-        <span />
-        <span />
-        <span />
-      </span>
-      <span className="theme-toggle-label">
-        {isF1 ? "RACE MODE" : "LIGHTS OUT"}
-      </span>
-    </button>
+    <div className="mode-switch" role="group" aria-label="Theme mode">
+      <span className="mode-switch-key" aria-hidden="true">[T]</span>
+      <button
+        type="button"
+        className={`mode-seg ${!isF1 ? "mode-seg--active" : ""}`}
+        onClick={() => setTheme("default")}
+        aria-pressed={!isF1}
+      >
+        TRM
+      </button>
+      <span className="mode-switch-div" aria-hidden="true">/</span>
+      <button
+        type="button"
+        className={`mode-seg ${isF1 ? "mode-seg--active" : ""}`}
+        onClick={() => setTheme("f1")}
+        aria-pressed={isF1}
+      >
+        F1
+      </button>
+    </div>
   );
 };
 

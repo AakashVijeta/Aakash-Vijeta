@@ -1,15 +1,17 @@
 /* ── Terminal CRT (default) ─────────────────────────────────── */
 :root {
   --color-bg:       #050905;
-  --color-surface:  #070d07;
-  --color-accent:   #00ff41;
-  --color-text:     #00ff41;
-  --color-muted:    #005a15;
-  --color-border:   #002208;
+  --color-surface:  #080d08;
+  --color-accent:   #3dff7a;
+  --color-text:     #b7f5c3;
+  --color-muted:    #5a8a6a;
+  --color-border:   #1a3322;
   --color-white:    #e8ffe8;
 
-  --font-display: 'Share Tech Mono', monospace;
-  --font-body:    'Share Tech Mono', monospace;
+  --font-display: 'Rethink Sans', 'Inter', 'Segoe UI', system-ui, sans-serif;
+  --font-body:    'Rethink Sans', 'Inter', 'Segoe UI', system-ui, sans-serif;
+  --font-mono:    'JetBrains Mono', 'Consolas', monospace;
+  --font-serif:   'Cormorant Garamond', Georgia, 'Times New Roman', serif;
 
   --glow: 0 0 8px rgba(0, 255, 65, 0.4);
   --glow-strong: 0 0 16px rgba(0, 255, 65, 0.3), 0 0 32px rgba(0, 255, 65, 0.12);
@@ -25,8 +27,10 @@
   --color-border:   #1e1e1e;
   --color-white:    #ffffff;
 
-  --font-display: 'Barlow Condensed', sans-serif;
-  --font-body:    'DM Sans', sans-serif;
+  --font-display: 'Rethink Sans', 'Inter', 'Segoe UI', system-ui, sans-serif;
+  --font-body:    'Rethink Sans', 'Inter', 'Segoe UI', system-ui, sans-serif;
+  --font-mono:    'JetBrains Mono', 'Consolas', monospace;
+  --font-serif:   'Cormorant Garamond', Georgia, 'Times New Roman', serif;
 
   --glow: 0 0 8px rgba(225, 6, 0, 0.5);
   --glow-strong: 0 0 16px rgba(225, 6, 0, 0.4), 0 0 32px rgba(225, 6, 0, 0.2);
@@ -40,8 +44,8 @@ body::before {
   background:
     repeating-linear-gradient(
       0deg,
-      rgba(0, 255, 65, 0.04) 0px,
-      rgba(0, 255, 65, 0.04) 1px,
+      rgba(61, 255, 122, 0.025) 0px,
+      rgba(61, 255, 122, 0.025) 1px,
       transparent 1px,
       transparent 3px
     ),
@@ -49,12 +53,13 @@ body::before {
       0deg,
       transparent,
       transparent 2px,
-      rgba(0, 0, 0, 0.35) 2px,
-      rgba(0, 0, 0, 0.35) 4px
+      rgba(0, 0, 0, 0.22) 2px,
+      rgba(0, 0, 0, 0.22) 4px
     );
   pointer-events: none;
   z-index: 9998;
   opacity: 1;
+  mix-blend-mode: multiply;
   transition: opacity 0.4s;
 }
 
@@ -144,16 +149,13 @@ body::after {
 }
 
 /* ── Terminal: phosphor glow on headings and accent text ─────── */
-:root:not([data-theme="f1"]) h1,
-:root:not([data-theme="f1"]) h2,
-:root:not([data-theme="f1"]) h3,
-:root:not([data-theme="f1"]) .phosphor,
-:root:not([data-theme="f1"]) .section-enter-item[style*="--color-accent"] {
-  text-shadow: 0 0 8px rgba(0, 255, 65, 0.5);
+:root:not([data-theme="f1"]) .phosphor {
+  text-shadow: 0 0 6px rgba(61, 255, 122, 0.35);
 }
 
 :root:not([data-theme="f1"]) body {
-  text-shadow: 0 0 6px rgba(0, 255, 65, 0.35);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* ── Reduced motion ──────────────────────────────────────────── */

@@ -11,7 +11,7 @@ const isF1 = () => document.documentElement.getAttribute('data-theme') === 'f1';
 const isMobile = () => window.innerWidth <= 768;
 
 export default function SectionManager({ sections }) {
-  const { activeIndex, isTransitioning, setIsTransitioning, goTo } = useSectionContext();
+  const { activeIndex, isTransitioning, setIsTransitioning, goTo, navigateToRef } = useSectionContext();
   const wipeRef   = useRef(null);
   const glitchRef = useRef(null);
   const sectionRefs = useRef([]);
@@ -32,7 +32,8 @@ export default function SectionManager({ sections }) {
     gsap.killTweensOf(items);
     gsap.fromTo(items,
       { opacity: 0, y: 20 },
-      { opacity: 1, y: 0, duration: 0.5, stagger: 0.08, ease: 'power2.out' }
+      { opacity: 1, y: 0, duration: 0.5, stagger: 0.08, ease: 'power2.out',
+        onComplete: () => gsap.set(items, { clearProps: 'transform,opacity' }) }
     );
   }, []);
 
@@ -44,34 +45,79 @@ export default function SectionManager({ sections }) {
   }, []);
 
   const advance = useCallback(async (dir) => {
-    if (isTransitioning) return;
-    const nextIndex = activeIndex + dir;
+    if (isTransitioningRef.current) return;
+    const nextIndex = activeIndexRef.current + dir;
     if (nextIndex < 0 || nextIndex >= SECTIONS.length) return;
 
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     setIsTransitioning(true);
-
+    isTransitioningRef.current = true;
     resetSection(nextIndex);
 
-    if (prefersReduced || isMobile()) {
-      const current = sectionRefs.current[activeIndex];
-      const next    = sectionRefs.current[nextIndex];
-      gsap.to(current, { opacity: 0, duration: 0.15 });
-      await new Promise(r => setTimeout(r, 150));
-      goTo(nextIndex);
-      gsap.set(next, { opacity: 1 });
-      await new Promise(r => setTimeout(r, 50));
-    } else if (isF1()) {
-      await wipeRef.current.play();
-      goTo(nextIndex);
-    } else {
-      await glitchRef.current.play(sectionRefs.current[activeIndex]);
-      goTo(nextIndex);
+    try {
+      if (prefersReduced || isMobile()) {
+        const current = sectionRefs.current[activeIndexRef.current];
+        const next    = sectionRefs.current[nextIndex];
+        gsap.to(current, { opacity: 0, duration: 0.15 });
+        await new Promise(r => setTimeout(r, 150));
+        goTo(nextIndex);
+        gsap.set(next, { opacity: 1 });
+        await new Promise(r => setTimeout(r, 50));
+      } else if (isF1()) {
+        await wipeRef.current.play();
+        goTo(nextIndex);
+      } else {
+        await glitchRef.current.play(sectionRefs.current[activeIndexRef.current]);
+        goTo(nextIndex);
+      }
+      runEntranceAnimation(nextIndex);
+    } finally {
+      setIsTransitioning(false);
+      isTransitioningRef.current = false;
     }
+  }, [goTo, setIsTransitioning, runEntranceAnimation, resetSection]);
 
-    runEntranceAnimation(nextIndex);
-    setIsTransitioning(false);
-  }, [activeIndex, isTransitioning, goTo, setIsTransitioning, runEntranceAnimation, resetSection]);
+  // Keep live refs so navigateTo never captures stale closure values
+  const activeIndexRef = useRef(activeIndex);
+  const isTransitioningRef = useRef(isTransitioning);
+  useEffect(() => { activeIndexRef.current = activeIndex; }, [activeIndex]);
+  useEffect(() => { isTransitioningRef.current = isTransitioning; }, [isTransitioning]);
+
+  // Register navigateTo on mount — reads state via refs to avoid stale closures
+  useEffect(() => {
+    navigateToRef.current = async (nextIndex) => {
+      if (isTransitioningRef.current) return;
+      if (nextIndex === activeIndexRef.current) return;
+      if (nextIndex < 0 || nextIndex >= SECTIONS.length) return;
+
+      const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      setIsTransitioning(true);
+      isTransitioningRef.current = true;
+      resetSection(nextIndex);
+
+      try {
+        if (prefersReduced || isMobile()) {
+          const current = sectionRefs.current[activeIndexRef.current];
+          const next = sectionRefs.current[nextIndex];
+          gsap.to(current, { opacity: 0, duration: 0.15 });
+          await new Promise(r => setTimeout(r, 150));
+          goTo(nextIndex);
+          gsap.set(next, { opacity: 1 });
+          await new Promise(r => setTimeout(r, 50));
+        } else if (isF1()) {
+          await wipeRef.current.play();
+          goTo(nextIndex);
+        } else {
+          await glitchRef.current.play(sectionRefs.current[activeIndexRef.current]);
+          goTo(nextIndex);
+        }
+        runEntranceAnimation(nextIndex);
+      } finally {
+        setIsTransitioning(false);
+        isTransitioningRef.current = false;
+      }
+    };
+  }, [goTo, setIsTransitioning, resetSection, runEntranceAnimation, navigateToRef]);
 
   // Animate section 0 on first mount
   useEffect(() => {

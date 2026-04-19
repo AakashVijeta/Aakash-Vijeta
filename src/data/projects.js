@@ -116,6 +116,3 @@ export const projectDetails = [
     },
   },
 ];
-
-export const getProjectBySlug = (slug) =>
-  projectDetails.find((p) => p.slug === slug);

@@ -1,17 +1,8 @@
-import { useState } from 'react';
-
 const EMAIL = 'aakashvijeta2@gmail.com';
 const GITHUB = 'https://github.com/AakashVijeta';
+const LINKEDIN = 'https://linkedin.com/in/aakashvijeta';
 
 export default function ContactSection() {
-  const [copied, setCopied] = useState(false);
-
-  const copyEmail = async () => {
-    await navigator.clipboard.writeText(EMAIL);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
-
   return (
     <section
       className="section section-stripe"
@@ -66,26 +57,32 @@ export default function ContactSection() {
           <span className="contact-cursor">_</span>
         </div>
 
-        <button
-          className="section-enter-item contact-copy-btn"
-          onClick={copyEmail}
-        >
-          <span>{copied ? '[ COPIED TO CLIPBOARD ]' : '[ COPY ADDRESS ]'}</span>
-          <span className="contact-copy-arrow">→</span>
-        </button>
+        <div className="section-enter-item" style={{ display: 'flex', gap: '16px', alignItems: 'center', flexWrap: 'wrap', marginTop: '8px' }}>
+          <a
+            href={`mailto:${EMAIL}`}
+            className="contact-bracket-box"
+          >
+            [ INITIATE CONTACT ] 
+          </a>
+          <a
+            href={GITHUB}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="contact-bracket-box"
+          >
+            [ GITHUB ]
+          </a>
+          <a
+            href={LINKEDIN}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="contact-bracket-box"
+          >
+            [ LINKEDIN ]
+          </a>
+        </div>
 
         <div className="section-enter-item contact-dossier">
-          <div className="intro-dossier-line">
-            <span>GITHUB</span>
-            <a
-              href={GITHUB}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="contact-link"
-            >
-              AakashVijeta ↗
-            </a>
-          </div>
           <div className="intro-dossier-line">
             <span>RESPONSE</span>
             <span>&lt; 24H</span>
