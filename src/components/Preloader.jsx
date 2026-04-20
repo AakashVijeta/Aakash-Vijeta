@@ -10,9 +10,10 @@ const LOG_LINES = [
   '> HANDSHAKE_COMPLETE',
 ];
 
-const TOTAL_MS = 3400;
-const EXIT_MS  = 4000;
-const DONE_MS  = 4800;
+const TOTAL_MS = 2400;
+const EXIT_MS  = 3000;
+const DONE_MS  = 3800;
+// Overall length = DONE_MS (was 4800ms, now 3800ms — 1s shorter).
 const SVG_H    = 60;
 const CY       = SVG_H / 2;
 
@@ -70,6 +71,8 @@ export default function Preloader() {
   const contentRef   = useRef(null); // all visible HUD — fades out before curtains leave
   const curtainTRef  = useRef(null); // top half bg — slides up
   const curtainBRef  = useRef(null); // bottom half bg — slides down
+  const edgeTRef     = useRef(null); // glowing bottom edge of top curtain
+  const edgeBRef     = useRef(null); // glowing top edge of bottom curtain
   const pathRef      = useRef(null);
 
   if (!layerRef.current) layerRef.current = genNoiseLayers(window.innerWidth);
@@ -96,11 +99,19 @@ export default function Preloader() {
           ease: 'power3.in',
           transformOrigin: 'center center',
         })
+        // Hand off: edges fade in as the wave finishes collapsing,
+        // sitting exactly on the centerline where the flat signal rests.
+        .to([edgeTRef.current, edgeBRef.current], {
+          opacity: 1,
+          duration: 0.12,
+          ease: 'none',
+        }, '<85%')
         .to(contentRef.current, {
           opacity: 0,
           duration: 0.15,
           ease: 'none',
         })
+        // Curtains slide away — the edges go with them, splitting the line in two.
         .to(curtainTRef.current, {
           yPercent: -100,
           duration: 0.55,
@@ -110,7 +121,13 @@ export default function Preloader() {
           yPercent: 100,
           duration: 0.55,
           ease: 'power2.inOut',
-        }, '<');
+        }, '<')
+        // Edges fade as they leave the viewport so they don't linger as bars.
+        .to([edgeTRef.current, edgeBRef.current], {
+          opacity: 0,
+          duration: 0.25,
+          ease: 'power2.in',
+        }, '>-0.2');
     });
 
     return () => ctx.revert();
@@ -166,8 +183,12 @@ export default function Preloader() {
       {/* Two curtains — together they ARE the dark background.
           They slide away from the center line (where the flat signal sits)
           to reveal the site from the inside out. */}
-      <div className="pl-curtain-t" ref={curtainTRef} />
-      <div className="pl-curtain-b" ref={curtainBRef} />
+      <div className="pl-curtain-t" ref={curtainTRef}>
+        <div className="pl-curtain-edge pl-curtain-edge--t" ref={edgeTRef} />
+      </div>
+      <div className="pl-curtain-b" ref={curtainBRef}>
+        <div className="pl-curtain-edge pl-curtain-edge--b" ref={edgeBRef} />
+      </div>
 
       {/* All visible HUD content — fades out just before curtains leave */}
       <div className="pl-content" ref={contentRef}>

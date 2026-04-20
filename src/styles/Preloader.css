@@ -20,6 +20,25 @@
 .pl-curtain-t { top: 0;    height: 50%; }
 .pl-curtain-b { bottom: 0; height: 50%; }
 
+/* Glowing edge that takes over from the flat signal line and rides
+   each curtain as it slides away — splits the line in two. */
+.pl-curtain-edge {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1.5px;
+  background: var(--color-accent);
+  opacity: 0;
+  pointer-events: none;
+  filter:
+    drop-shadow(0 0 3px var(--color-accent))
+    drop-shadow(0 0 6px color-mix(in srgb, var(--color-accent) 50%, transparent));
+}
+/* The flat signal sits at 44vh (centerline top:calc(44% - 30px) + CY 30px),
+   not at the 50% curtain seam — offset the edges so they hand off seamlessly. */
+.pl-curtain-edge--t { bottom: 6vh; }
+.pl-curtain-edge--b { top: -6vh; }
+
 /* All HUD content sits above the curtains */
 .pl-content {
   position: absolute;
