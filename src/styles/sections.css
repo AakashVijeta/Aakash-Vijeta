@@ -2019,6 +2019,21 @@
   nav[aria-label="Section navigation"] {
     display: none !important;
   }
+
+  /* Tighten every section on mobile so top/bottom bars anchor to the edges
+     and the middle content fills the remaining space. Without this, tall
+     phones show large empty gaps above and below the content block. */
+  .intro-hero {
+    padding: 28px 20px 24px !important;
+  }
+  .intro-hero .intro-center {
+    flex: 1;
+    align-content: center;
+  }
+  /* Contact section root (uses inline padding 64px 6vw 56px) */
+  section.section.section-stripe[style*="64px 6vw 56px"] {
+    padding: 28px 18px 24px !important;
+  }
 }
 
 /* ── Touch devices: disable hover-triggered transforms ───────── */

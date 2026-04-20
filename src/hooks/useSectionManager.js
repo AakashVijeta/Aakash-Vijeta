@@ -5,7 +5,8 @@ import gsap from 'gsap';
 gsap.registerPlugin(Observer);
 
 const WHEEL_THRESHOLD = 80;   // px accumulated before advancing
-const SWIPE_THRESHOLD = 90;   // px minimum swipe travel
+const SWIPE_THRESHOLD = 120;  // px minimum swipe travel
+const GESTURE_COOLDOWN_MS = 600; // ignore new swipes briefly after one fires
 
 const getActiveScrollable = () => {
   const activeSection = document.querySelector('[data-section-active="true"]');
@@ -48,12 +49,13 @@ export function useSectionManager({ activeIndex, isTransitioning, advance }) {
     // only advance if the vertical displacement clearly exceeded horizontal.
     // This lets a user scroll horizontally in the projects slider AND swipe
     // vertically to change section — whichever axis dominates wins.
-    const gesture = { startX: 0, startY: 0 };
+    const gesture = { startX: 0, startY: 0, lastFiredAt: 0 };
     const isVerticallyDominant = (self) => {
       const dx = Math.abs(self.x - gesture.startX);
       const dy = Math.abs(self.y - gesture.startY);
-      return dy > dx * 1.8 && dy > 60;
+      return dy > dx * 2 && dy > 80;
     };
+    const inCooldown = () => Date.now() - gesture.lastFiredAt < GESTURE_COOLDOWN_MS;
 
     observerRef.current = Observer.create({
       type: 'touch',
@@ -65,21 +67,23 @@ export function useSectionManager({ activeIndex, isTransitioning, advance }) {
       },
       // Swipe UP (finger up) → advance to NEXT section
       onUp: (self) => {
-        if (isTransitioning) return;
+        if (isTransitioning || inCooldown()) return;
         if (!isVerticallyDominant(self)) return;
         const scrollable = getActiveScrollable();
         if (scrollable) {
           const { scrollTop, scrollHeight, clientHeight } = scrollable;
           if (scrollTop + clientHeight < scrollHeight - 24) return;
         }
+        gesture.lastFiredAt = Date.now();
         advance(1);
       },
       // Swipe DOWN (finger down) → advance to PREVIOUS section
       onDown: (self) => {
-        if (isTransitioning) return;
+        if (isTransitioning || inCooldown()) return;
         if (!isVerticallyDominant(self)) return;
         const scrollable = getActiveScrollable();
         if (scrollable && scrollable.scrollTop > 24) return;
+        gesture.lastFiredAt = Date.now();
         advance(-1);
       },
       minimumMovement: SWIPE_THRESHOLD,
