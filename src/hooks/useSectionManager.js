@@ -5,7 +5,7 @@ import gsap from 'gsap';
 gsap.registerPlugin(Observer);
 
 const WHEEL_THRESHOLD = 80;   // px accumulated before advancing
-const SWIPE_THRESHOLD = 50;   // px minimum swipe travel
+const SWIPE_THRESHOLD = 90;   // px minimum swipe travel
 
 const getActiveScrollable = () => {
   const activeSection = document.querySelector('[data-section-active="true"]');
@@ -52,7 +52,7 @@ export function useSectionManager({ activeIndex, isTransitioning, advance }) {
     const isVerticallyDominant = (self) => {
       const dx = Math.abs(self.x - gesture.startX);
       const dy = Math.abs(self.y - gesture.startY);
-      return dy > dx * 1.2;
+      return dy > dx * 1.8 && dy > 60;
     };
 
     observerRef.current = Observer.create({
@@ -70,7 +70,7 @@ export function useSectionManager({ activeIndex, isTransitioning, advance }) {
         const scrollable = getActiveScrollable();
         if (scrollable) {
           const { scrollTop, scrollHeight, clientHeight } = scrollable;
-          if (scrollTop + clientHeight < scrollHeight - 5) return;
+          if (scrollTop + clientHeight < scrollHeight - 24) return;
         }
         advance(1);
       },
@@ -79,7 +79,7 @@ export function useSectionManager({ activeIndex, isTransitioning, advance }) {
         if (isTransitioning) return;
         if (!isVerticallyDominant(self)) return;
         const scrollable = getActiveScrollable();
-        if (scrollable && scrollable.scrollTop > 5) return;
+        if (scrollable && scrollable.scrollTop > 24) return;
         advance(-1);
       },
       minimumMovement: SWIPE_THRESHOLD,

@@ -1165,12 +1165,16 @@
 @media (max-width: 900px) {
   .profiler-container { grid-template-columns: 1fr; height: auto; max-height: none; }
 
-  /* Section becomes vertically scrollable — content taller than viewport on mobile */
+  /* Section becomes vertically scrollable — content taller than viewport on mobile.
+     Extra top/bottom padding gives a little overscroll room so the user can drift
+     past the content edges before a vertical swipe advances the section. */
   .about-profiler {
     overflow-y: auto !important;
     -webkit-overflow-scrolling: touch;
     justify-content: flex-start !important;
     scrollbar-width: none;
+    padding-top: 32px;
+    padding-bottom: 64px;
   }
   .about-profiler::-webkit-scrollbar { display: none; }
 
@@ -1749,6 +1753,7 @@
 @media (max-width: 720px) {
   /* Horizontal scroll-snap slider: one card centered, peeks on both edges */
   .projects-list {
+    flex: 1 1 auto;
     flex-direction: row;
     justify-content: flex-start;
     overflow-x: auto;
@@ -1758,10 +1763,9 @@
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
     gap: 14px;
-    padding: 16px 10vw;
+    padding: 12px 10vw;
     scroll-padding-inline: 10vw;
-    height: 50vh;
-    max-height: 460px;
+    min-height: 0;
   }
   .projects-list::-webkit-scrollbar { display: none; }
 
@@ -1913,7 +1917,9 @@
   .intro-hero,
   .contact-top,
   .contact-bottom {}
-  .projects-topbar { padding: 20px 18px 12px; }
+  .projects-topbar { padding: 14px 18px 8px; gap: 8px; }
+  .projects-topbar .profiler-rule { margin: 0; }
+  .projects-title { font-size: clamp(1.6rem, 7vw, 2.2rem); }
   .projects-topbar-row {
     flex-direction: column;
     align-items: flex-start;
@@ -1942,6 +1948,12 @@
   /* Intro hero: tighter padding on small heights so name fits */
   .intro-hero {
     padding: 28px 20px 24px !important;
+  }
+  /* Let the middle fill remaining vertical space so top/bottom bars anchor
+     to the edges without leaving huge gaps around the name block. */
+  .intro-hero .intro-center {
+    flex: 1;
+    align-content: center;
   }
   .intro-top-bar,
   .intro-bottom-bar {

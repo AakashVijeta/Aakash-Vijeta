@@ -38,6 +38,8 @@ export default function ContactSection() {
         flexDirection: 'column',
         gap: '24px',
         alignItems: 'flex-start',
+        justifyContent: 'center',
+        flex: 1,
       }}>
         <div className="section-enter-item" style={{
           fontFamily: 'var(--font-display)',

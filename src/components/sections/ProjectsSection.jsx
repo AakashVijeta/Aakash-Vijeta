@@ -82,7 +82,7 @@ export default function ProjectsSection() {
 
       <div className="projects-bottombar section-enter-item">
         <span>{projectDetails.length.toString().padStart(2, '0')} ACTIVE · {CLASSIFIED_SLOTS.length.toString().padStart(2, '0')} CLASSIFIED</span>
-        <span>{window.matchMedia('(hover: none)').matches ? '↕  SCROLL · TAP TO VIEW' : '◁  HOVER · NAVIGATE  ▷'}</span>
+        <span>{window.matchMedia('(hover: none)').matches ? '◁  SWIPE · TAP TO VIEW  ▷' : '◁  HOVER · NAVIGATE  ▷'}</span>
       </div>
     </section>
   );
