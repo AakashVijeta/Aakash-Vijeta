@@ -4,7 +4,8 @@ import gsap from 'gsap';
 
 gsap.registerPlugin(Observer);
 
-const WHEEL_THRESHOLD = 80;   // px accumulated before advancing
+const WHEEL_THRESHOLD = 50;   // px accumulated before advancing
+const WHEEL_COOLDOWN_MS = 800; // ignore wheel events after advancing once
 const SWIPE_THRESHOLD = 120;  // px minimum swipe travel
 const GESTURE_COOLDOWN_MS = 600; // ignore new swipes briefly after one fires
 
@@ -16,15 +17,18 @@ const getActiveScrollable = () => {
 
 export function useSectionManager({ activeIndex, isTransitioning, advance }) {
   const wheelAccRef = useRef(0);
+  const wheelLastFiredRef = useRef(0);
   const observerRef = useRef(null);
 
   useEffect(() => {
     const onWheel = (e) => {
       if (isTransitioning) return;
+      if (Date.now() - wheelLastFiredRef.current < WHEEL_COOLDOWN_MS) return;
       wheelAccRef.current += e.deltaY;
       if (Math.abs(wheelAccRef.current) >= WHEEL_THRESHOLD) {
         const dir = wheelAccRef.current > 0 ? 1 : -1;
         wheelAccRef.current = 0;
+        wheelLastFiredRef.current = Date.now();
         advance(dir);
       }
     };
@@ -100,5 +104,6 @@ export function useSectionManager({ activeIndex, isTransitioning, advance }) {
   // Reset wheel accumulator on section change
   useEffect(() => {
     wheelAccRef.current = 0;
+    wheelLastFiredRef.current = Date.now();
   }, [activeIndex]);
 }
