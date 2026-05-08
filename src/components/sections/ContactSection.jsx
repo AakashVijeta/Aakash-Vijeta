@@ -109,7 +109,7 @@ export default function ContactSection({ isActive }) {
       </div>
 
       {/* Bottom meta */}
-      <div className="section-enter-item" style={{
+      <div className="contact-bottom-bar section-enter-item" style={{
         display: 'flex',
         justifyContent: 'space-between',
         paddingTop: '12px',

@@ -5,7 +5,6 @@ import { useSectionManager } from '../hooks/useSectionManager';
 import WipeTransition from './WipeTransition';
 import GlitchTransition from './GlitchTransition';
 import SectionCounter from './SectionCounter';
-import KeyHints from './KeyHints';
 
 const isF1 = () => document.documentElement.getAttribute('data-theme') === 'f1';
 const isMobile = () => window.innerWidth <= 768;
@@ -24,22 +23,28 @@ export default function SectionManager({ sections }) {
 
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (prefersReduced) {
-      gsap.set(items, { opacity: 1, y: 0, filter: 'blur(0px)' });
+      gsap.set(items, { opacity: 1, y: 0 });
       return;
     }
 
     // Kill any running tweens on these items before animating in
     gsap.killTweensOf(items);
+    // Suppress CSS transitions — .profiler-module has transition:transform which
+    // fights GSAP frame-by-frame and causes jank. Restore on complete.
+    items.forEach(el => el.style.setProperty('transition', 'none'));
     gsap.fromTo(items,
-      { opacity: 0, y: 28, filter: 'blur(8px)' },
+      { opacity: 0, y: 28 },
       {
         opacity: 1,
         y: 0,
-        filter: 'blur(0px)',
         duration: 0.68,
         stagger: { each: 0.07, from: 'start' },
         ease: 'power3.out',
-        onComplete: () => gsap.set(items, { clearProps: 'transform,opacity,filter' }),
+        force3D: true,
+        onComplete: () => {
+          gsap.set(items, { clearProps: 'transform,opacity' });
+          items.forEach(el => el.style.removeProperty('transition'));
+        },
       }
     );
   }, []);
@@ -48,7 +53,7 @@ export default function SectionManager({ sections }) {
     const el = sectionRefs.current[index];
     if (!el) return;
     const items = el.querySelectorAll('.section-enter-item');
-    if (items.length) gsap.set(items, { opacity: 0, y: 28, filter: 'blur(8px)' });
+    if (items.length) gsap.set(items, { opacity: 0, y: 28 });
   }, []);
 
   const advance = useCallback(async (dir) => {
@@ -138,7 +143,6 @@ export default function SectionManager({ sections }) {
       <WipeTransition ref={wipeRef} />
       <GlitchTransition ref={glitchRef} />
       <SectionCounter />
-      <KeyHints />
 
       <div style={{ position: 'relative', width: '100%', height: '100dvh', overflow: 'hidden' }}>
         {sections.map((Section, i) => (

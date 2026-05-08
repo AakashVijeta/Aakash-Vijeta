@@ -1,8 +1,4 @@
 .mode-switch {
-  position: fixed;
-  bottom: 18px;
-  right: 18px;
-  z-index: 10000;
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -49,10 +45,6 @@
 
 @media (max-width: 720px) {
   .mode-switch {
-    /* bottom offset tuned so the pill's vertical center matches the
-       bottom-bar text row (section padding-bottom 12px + ~8px text). */
-    bottom: 7px;
-    right: 12px;
     font-size: 9px;
     padding: 3px 6px;
   }

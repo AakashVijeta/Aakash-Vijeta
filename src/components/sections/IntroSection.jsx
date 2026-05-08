@@ -152,16 +152,14 @@ export default function IntroSection({ isActive }) {
         }}>
           LOCATION · 26.14°N 91.65°E · INDIA
         </div>
-        <div className="intro-meta-row" style={{
+        <div className="intro-meta-row intro-nav-hint" style={{
           fontFamily: 'var(--font-display)',
           fontSize: 'clamp(0.6rem, 0.9vw, 0.7rem)',
           letterSpacing: '0.3em',
           color: 'var(--color-muted)',
           textTransform: 'uppercase',
         }}>
-          {window.matchMedia('(hover: none)').matches
-            ? 'SWIPE UP / DOWN TO NAVIGATE'
-            : 'USE ARROW KEYS OR SCROLL TO NAVIGATE'}
+          USE ARROW KEYS OR SCROLL TO NAVIGATE
         </div>
       </div>
     </section>

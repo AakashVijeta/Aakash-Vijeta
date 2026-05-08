@@ -2,7 +2,7 @@ import { SectionProvider } from './context/SectionContext';
 import SectionManager from './components/SectionManager';
 import ProjectOverlay from './components/ProjectOverlay';
 import Preloader from './components/Preloader';
-import ThemeToggle from './components/ThemeToggle';
+import BottomBar from './components/BottomBar';
 import NavDots from './components/NavDots';
 import CustomCursor from './components/CustomCursor';
 import IntroSection from './components/sections/IntroSection';
@@ -24,7 +24,7 @@ function App() {
       <div className="App">
         <CustomCursor />
         <Preloader />
-        <ThemeToggle />
+        <BottomBar />
         <NavDots />
         <SectionManager sections={SECTION_COMPONENTS} />
         <ProjectOverlay />

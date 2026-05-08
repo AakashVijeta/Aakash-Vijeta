@@ -49,30 +49,24 @@ const GlitchTransition = forwardRef(function GlitchTransition(_, ref) {
           },
         });
 
-        // 3-clone RGB split: red left, green center, blue right, heavier offset
+        // 3-clone RGB split: red left, green center, blue right
         if (clones.length === 3) {
-          tl.set(clones[0], { opacity: 1, x: -6 }, 0)
+          tl.set(clones[0], { opacity: 1, x: -12 }, 0)
             .set(clones[1], { opacity: 1, x: 0 }, 0)
-            .set(clones[2], { opacity: 1, x: 6 }, 0)
-            .to(clones[0], { x: -10, duration: 0.1, ease: 'none' }, 0)
-            .to(clones[2], { x: 10, duration: 0.1, ease: 'none' }, 0)
-            .to(clones[0], { x: -3, duration: 0.05, ease: 'none' }, 0.1)
-            .to(clones[2], { x: 3, duration: 0.05, ease: 'none' }, 0.1);
+            .set(clones[2], { opacity: 1, x: 12 }, 0)
+            .to(clones[0], { x: -22, duration: 0.1, ease: 'none' }, 0)
+            .to(clones[2], { x: 22, duration: 0.1, ease: 'none' }, 0)
+            .to(clones[0], { x: -8, duration: 0.05, ease: 'none' }, 0.1)
+            .to(clones[2], { x: 8, duration: 0.05, ease: 'none' }, 0.1);
         }
 
-        // Four random scan bands displace laterally, harder
-        const y1 = `${10 + Math.random() * 25}%`;
-        const y2 = `${35 + Math.random() * 20}%`;
-        const y3 = `${58 + Math.random() * 20}%`;
-        const y4 = `${78 + Math.random() * 15}%`;
+        // Two scan bands displace laterally
+        const y1 = `${15 + Math.random() * 30}%`;
+        const y2 = `${55 + Math.random() * 25}%`;
         tl.set(band1, { top: y1, opacity: 1, x: 0 }, 0.06)
           .set(band2, { top: y2, opacity: 1, x: 0 }, 0.06)
           .to(band1, { x: 38, duration: 0.08, ease: 'power2.out' }, 0.06)
-          .to(band2, { x: -30, duration: 0.08, ease: 'power2.out' }, 0.06)
-          .set(band1, { top: y3, x: 0 }, 0.14)
-          .set(band2, { top: y4, x: 0 }, 0.14)
-          .to(band1, { x: -28, duration: 0.06, ease: 'power2.out' }, 0.14)
-          .to(band2, { x: 24, duration: 0.06, ease: 'power2.out' }, 0.14);
+          .to(band2, { x: -30, duration: 0.08, ease: 'power2.out' }, 0.06);
 
         // Hard cut — caller swaps section
         tl.call(resolve, null, 0.14);

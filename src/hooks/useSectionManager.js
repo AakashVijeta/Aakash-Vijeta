@@ -4,10 +4,10 @@ import gsap from 'gsap';
 
 gsap.registerPlugin(Observer);
 
-const WHEEL_THRESHOLD = 50;   // px accumulated before advancing
-const WHEEL_COOLDOWN_MS = 800; // ignore wheel events after advancing once
-const SWIPE_THRESHOLD = 120;  // px minimum swipe travel
-const GESTURE_COOLDOWN_MS = 600; // ignore new swipes briefly after one fires
+const WHEEL_THRESHOLD = 100;  // px accumulated before advancing
+const WHEEL_COOLDOWN_MS = 1200; // ignore wheel events after advancing once
+const SWIPE_THRESHOLD = 80;   // px minimum swipe travel
+const GESTURE_COOLDOWN_MS = 900; // ignore new swipes briefly after one fires
 
 const getActiveScrollable = () => {
   const activeSection = document.querySelector('[data-section-active="true"]');
@@ -23,7 +23,10 @@ export function useSectionManager({ activeIndex, isTransitioning, advance }) {
   useEffect(() => {
     const onWheel = (e) => {
       if (isTransitioning) return;
-      if (Date.now() - wheelLastFiredRef.current < WHEEL_COOLDOWN_MS) return;
+      if (Date.now() - wheelLastFiredRef.current < WHEEL_COOLDOWN_MS) {
+        wheelAccRef.current = 0; // drain momentum during cooldown so it can't retrigger immediately after
+        return;
+      }
       wheelAccRef.current += e.deltaY;
       if (Math.abs(wheelAccRef.current) >= WHEEL_THRESHOLD) {
         const dir = wheelAccRef.current > 0 ? 1 : -1;
@@ -57,14 +60,14 @@ export function useSectionManager({ activeIndex, isTransitioning, advance }) {
     const isVerticallyDominant = (self) => {
       const dx = Math.abs(self.x - gesture.startX);
       const dy = Math.abs(self.y - gesture.startY);
-      return dy > dx * 2 && dy > 80;
+      return dy > dx * 2.5 && dy > 80;
     };
     const inCooldown = () => Date.now() - gesture.lastFiredAt < GESTURE_COOLDOWN_MS;
 
     observerRef.current = Observer.create({
       type: 'touch',
-      tolerance: 10,
-      dragMinimum: 8,
+      tolerance: 5,
+      dragMinimum: 5,
       onPress: (self) => {
         gesture.startX = self.x;
         gesture.startY = self.y;

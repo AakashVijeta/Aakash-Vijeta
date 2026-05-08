@@ -1,68 +1,43 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
+import { useSectionContext } from '../context/SectionContext';
 
 export default function KeyHints() {
   const ref = useRef(null);
-  const [visible, setVisible] = useState(false);
-  const timerRef = useRef(null);
-  const hiddenRef = useRef(false);
+  const { activeIndex } = useSectionContext();
 
   useEffect(() => {
-    const show = () => {
-      if (hiddenRef.current) return;
-      timerRef.current = setTimeout(() => {
-        setVisible(true);
-        gsap.fromTo(ref.current, { opacity: 0 }, { opacity: 1, duration: 0.6 });
-      }, 3000);
-    };
+    const timer = setTimeout(() => {
+      gsap.fromTo(ref.current, { opacity: 0 }, { opacity: 1, duration: 0.6 });
+    }, 1500);
 
-    const hide = () => {
-      clearTimeout(timerRef.current);
-      if (visible) {
-        hiddenRef.current = true;
-        gsap.to(ref.current, { opacity: 0, duration: 0.3 });
-      }
-    };
+    return () => clearTimeout(timer);
+  }, []);
 
-    show();
-    window.addEventListener('keydown', hide);
-    window.addEventListener('wheel', hide, { passive: true });
-    window.addEventListener('touchstart', hide);
-
-    return () => {
-      clearTimeout(timerRef.current);
-      window.removeEventListener('keydown', hide);
-      window.removeEventListener('wheel', hide);
-      window.removeEventListener('touchstart', hide);
-    };
-  }, [visible]);
+  if (activeIndex !== 0) return null;
 
   return (
     <div
       ref={ref}
       className="key-hints"
       style={{
-        position: 'fixed',
-        bottom: '24px',
-        left: '50%',
-        transform: 'translateX(-50%)',
         display: 'flex',
         gap: '16px',
         alignItems: 'center',
         fontFamily: 'var(--font-display)',
-        fontSize: '10px',
-        letterSpacing: '2px',
+        fontSize: 'clamp(0.55rem, 0.9vw, 0.7rem)',
+        letterSpacing: '0.3em',
         color: 'var(--color-muted)',
-        zIndex: 1000,
+        textTransform: 'uppercase',
         opacity: 0,
         userSelect: 'none',
         pointerEvents: 'none',
         whiteSpace: 'nowrap',
       }}
     >
-      <span>↑↓ navigate</span>
+      <span>[↑][↓] navigate</span>
       <span style={{ color: 'var(--color-border)' }}>·</span>
-      <span>T toggle mode</span>
+      <span>[T] toggle mode</span>
     </div>
   );
 }
