@@ -1421,7 +1421,7 @@
   .section-counter,
   .key-hints,
   .intro-nav-hint {
-    display: none;
+    display: none !important;
   }
 
   /* About: stack portrait above content */

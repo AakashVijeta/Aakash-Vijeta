@@ -230,3 +230,140 @@
   from { opacity: 0; transform: translateX(-4px); }
   to   { opacity: 1; transform: translateX(0); }
 }
+
+/* ================================================================
+   Mobile responsive — match the desktop layout proportionally
+   ================================================================ */
+@media (max-width: 768px) {
+  /* Scan box: tighten side margins so frame stays proportional */
+  .pl-scan-box {
+    left: 6vw;
+    right: 6vw;
+    height: 110px;
+    top: calc(44% - 55px);
+  }
+
+  /* Corner brackets: match scan-box repositioning */
+  .pl-corner--tl {
+    top: calc(44% - 55px);
+    left: 6vw;
+    width: 22px;
+    height: 22px;
+  }
+  .pl-corner--br {
+    top: calc(44% + 27px);
+    right: 6vw;
+    width: 22px;
+    height: 22px;
+  }
+
+  /* HUD radar — pull closer to edge so it doesn't eat into center */
+  .pl-hud-tr {
+    top: 40px;
+    right: 24px;
+  }
+  .pl-radar {
+    width: 40px;
+    height: 40px;
+  }
+  .pl-badge {
+    font-size: 0.55rem;
+    padding: 3px 8px;
+    letter-spacing: 0.18em;
+  }
+
+  /* Freq label — smaller, re-centered */
+  .pl-freq-label {
+    font-size: 0.48rem;
+    letter-spacing: 0.15em;
+  }
+
+  /* Status label — slightly smaller and shifted to perfectly center with the signal line */
+  .pl-status-label {
+    top: 21px;
+    font-size: 0.52rem;
+    letter-spacing: 0.25em;
+    padding: 4px 12px;
+  }
+
+  /* Percentage — scale down for mobile proportions */
+  .pl-pct {
+    font-size: clamp(48px, 14vw, 80px);
+  }
+
+  /* Log lines — tighten left margin, smaller text */
+  .pl-log {
+    left: 7vw;
+    bottom: calc(50% - 140px);
+    gap: 5px;
+    padding-left: 10px;
+  }
+  .pl-log-line {
+    font-size: 0.6rem;
+    letter-spacing: 0.06em;
+  }
+}
+
+@media (max-width: 480px) {
+  .pl-scan-box {
+    left: 4vw;
+    right: 4vw;
+    height: 95px;
+    top: calc(44% - 48px);
+  }
+
+  .pl-corner--tl {
+    top: calc(44% - 48px);
+    left: 4vw;
+    width: 18px;
+    height: 18px;
+  }
+  .pl-corner--br {
+    top: calc(44% + 20px);
+    right: 4vw;
+    width: 18px;
+    height: 18px;
+  }
+
+  .pl-hud-tr {
+    top: 28px;
+    right: 16px;
+  }
+  .pl-radar {
+    width: 34px;
+    height: 34px;
+  }
+  .pl-badge {
+    font-size: 0.5rem;
+    padding: 2px 6px;
+    letter-spacing: 0.15em;
+  }
+
+  .pl-freq-label {
+    font-size: 0.42rem;
+  }
+
+  .pl-status-label {
+    top: 21px;
+    font-size: 0.46rem;
+    padding: 3px 10px;
+    letter-spacing: 0.2em;
+  }
+
+  .pl-pct {
+    font-size: clamp(40px, 16vw, 64px);
+  }
+  .pl-pct-wrap {
+    top: calc(44% + 22px);
+  }
+
+  .pl-log {
+    left: 5vw;
+    bottom: calc(50% - 120px);
+    gap: 4px;
+    padding-left: 8px;
+  }
+  .pl-log-line {
+    font-size: 0.52rem;
+  }
+}

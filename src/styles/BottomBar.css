@@ -16,7 +16,7 @@
 }
 
 @media (max-width: 720px) {
-  .key-hints { display: none; }
+  .key-hints { display: none !important; }
   .bottom-bar { justify-content: flex-end; }
 }
 
