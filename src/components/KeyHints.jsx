@@ -1,20 +1,16 @@
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
-import { useSectionContext } from '../context/SectionContext';
 
-export default function KeyHints() {
+export default function KeyHints({ revealDelay = 1500 }) {
   const ref = useRef(null);
-  const { activeIndex } = useSectionContext();
 
   useEffect(() => {
     const timer = setTimeout(() => {
       gsap.fromTo(ref.current, { opacity: 0 }, { opacity: 1, duration: 0.6 });
-    }, 1500);
+    }, revealDelay);
 
     return () => clearTimeout(timer);
-  }, []);
-
-  if (activeIndex !== 0) return null;
+  }, [revealDelay]);
 
   return (
     <div

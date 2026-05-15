@@ -1,167 +1,196 @@
 import { useLayoutEffect, useRef, useState, useEffect } from 'react';
 import gsap from 'gsap';
-import { scrambleText } from '../../utils/scramble';
+import KeyHints from '../KeyHints';
+
+const STATUS_WORDS    = ['ON TRACK', 'BUILDING', 'SHIPPING', 'TRAINING', 'COMPILING'];
+const TYPE_SPEED      = 80;
+const DELETE_SPEED    = 45;
+const HOLD_DURATION   = 2200;
+const PAUSE_BEFORE_TYPE = 400;
+
+const DOS_TERMINAL = [
+  { key: 'BASE',  val: 'IIT GUWAHATI · IND' },
+  { key: 'STACK', val: 'DS · ML · AI SYS' },
+];
+
+const DOS_F1 = [
+  { key: 'TEAM', val: 'INDEPENDENT' },
+  { key: 'BASE', val: 'IIT GUWAHATI · IND' },
+];
+
+function useTheme() {
+  const [isF1, setIsF1] = useState(
+    () => document.documentElement.getAttribute('data-theme') === 'f1'
+  );
+  useEffect(() => {
+    const obs = new MutationObserver(() =>
+      setIsF1(document.documentElement.getAttribute('data-theme') === 'f1')
+    );
+    obs.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    return () => obs.disconnect();
+  }, []);
+  return isF1;
+}
 
 export default function IntroSection({ isActive }) {
   const rootRef = useRef(null);
+  const isF1 = useTheme();
 
   const [preloaderDone, setPreloaderDone] = useState(() => !!sessionStorage.getItem('preloaded'));
 
+  const [timeStr, setTimeStr] = useState('00:00:00.000');
+  useEffect(() => {
+    let reqId;
+    const update = () => {
+      const now = new Date();
+      setTimeStr(
+        String(now.getHours()).padStart(2, '0') + ':' +
+        String(now.getMinutes()).padStart(2, '0') + ':' +
+        String(now.getSeconds()).padStart(2, '0') + '.' +
+        String(now.getMilliseconds()).padStart(3, '0')
+      );
+      reqId = requestAnimationFrame(update);
+    };
+    reqId = requestAnimationFrame(update);
+    return () => cancelAnimationFrame(reqId);
+  }, []);
+
+  const [statusText, setStatusText] = useState('');
+  const wordIdxRef    = useRef(0);
+  const charIdxRef    = useRef(0);
+  const isDeletingRef = useRef(false);
+  const twTimerRef    = useRef(null);
+
+  useEffect(() => {
+    const typewriterTick = () => {
+      const word = STATUS_WORDS[wordIdxRef.current];
+      if (!isDeletingRef.current) {
+        charIdxRef.current += 1;
+        setStatusText(word.slice(0, charIdxRef.current));
+        if (charIdxRef.current >= word.length) {
+          twTimerRef.current = setTimeout(() => {
+            isDeletingRef.current = true;
+            typewriterTick();
+          }, HOLD_DURATION);
+          return;
+        }
+        twTimerRef.current = setTimeout(typewriterTick, TYPE_SPEED + Math.random() * 40);
+      } else {
+        charIdxRef.current -= 1;
+        setStatusText(word.slice(0, charIdxRef.current));
+        if (charIdxRef.current <= 0) {
+          isDeletingRef.current = false;
+          wordIdxRef.current = (wordIdxRef.current + 1) % STATUS_WORDS.length;
+          twTimerRef.current = setTimeout(typewriterTick, PAUSE_BEFORE_TYPE);
+          return;
+        }
+        twTimerRef.current = setTimeout(typewriterTick, DELETE_SPEED);
+      }
+    };
+
+    twTimerRef.current = setTimeout(typewriterTick, PAUSE_BEFORE_TYPE);
+    return () => clearTimeout(twTimerRef.current);
+  }, []);
+
   useEffect(() => {
     if (preloaderDone) return;
-    const handleDone = () => setPreloaderDone(true);
-    window.addEventListener('preloader:done', handleDone);
-    return () => window.removeEventListener('preloader:done', handleDone);
+    const handle = () => setPreloaderDone(true);
+    window.addEventListener('preloader:done', handle);
+    return () => window.removeEventListener('preloader:done', handle);
   }, [preloaderDone]);
 
-  // useLayoutEffect + CSS opacity:0 on .intro-anim-item (see sections.css)
-  // prevents the ~1-frame flash where items were visible before GSAP reset
-  // them to 0 and started the timeline.
   useLayoutEffect(() => {
-    if (!isActive || !preloaderDone) return;
-    const el = rootRef.current;
-    if (!el) return;
+    if (!preloaderDone) return;
 
-    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const ctx = gsap.context(() => {
+      const root = rootRef.current;
+      if (!root) return;
 
-    const stamp = el.querySelectorAll('.intro-stamp');
-    const name1Chars = el.querySelectorAll('.intro-name-a .scramble-char');
-    const name2Chars = el.querySelectorAll('.intro-name-b .scramble-char');
-    const meta = el.querySelectorAll('.intro-meta-row');
-    const dossierLines = el.querySelectorAll('.intro-dossier-line');
-    const dossier = el.querySelector('.intro-dossier');
-    const allItems = [stamp, el.querySelector('.intro-name-a'), el.querySelector('.intro-name-b'), meta, dossierLines, dossier];
+      const topbar = root.querySelector('.ihyb-topbar');
+      const bottombar = root.querySelector('.ihyb-bottombar');
+      const nameA = root.querySelector('.ihyb-name-a');
+      const nameB = root.querySelector('.ihyb-name-b');
+      const dossier = root.querySelector('.ihyb-dossier');
+      const dossierRows = root.querySelectorAll('.ihyb-dos-row');
+      const targets = [topbar, bottombar, nameA, nameB, dossier, ...dossierRows].filter(Boolean);
+      const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    gsap.killTweensOf(allItems);
+      gsap.killTweensOf(targets);
 
-    if (prefersReduced) {
-      gsap.set(allItems, { opacity: 1, x: 0, y: 0, skewX: 0, scaleY: 1, filter: 'blur(0px)' });
-      return;
-    }
+      if (!isActive) {
+        gsap.set(targets, { autoAlpha: 0 });
+        return;
+      }
 
-    gsap.set(allItems, { opacity: 0 });
-    gsap.set(stamp, { y: 8 });
-    gsap.set([el.querySelector('.intro-name-a'), el.querySelector('.intro-name-b')], { y: 46, skewX: -5, filter: 'blur(5px)' });
-    gsap.set(dossierLines, { x: 16 });
-    gsap.set(meta, { y: 10 });
-    gsap.set(dossier, { scaleY: 0, transformOrigin: 'center center' });
+      if (prefersReduced) {
+        gsap.set(targets, { autoAlpha: 1, x: 0, y: 0, yPercent: 0 });
+        return;
+      }
 
-    const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+      gsap.set([topbar, bottombar, nameA, nameB, dossier], { autoAlpha: 0 });
+      gsap.set(dossierRows, { autoAlpha: 0, x: 12 });
 
-    tl.addLabel('intro', 0)
-      .to(stamp, { opacity: 1, y: 0, duration: 0.35, stagger: 0.05 }, 'intro')
-      .to(el.querySelector('.intro-name-a'), {
-        opacity: 1,
-        y: 0,
-        skewX: 0,
-        filter: 'blur(0px)',
-        duration: 0.72,
-      }, 'intro+=0.19');
-    
-    // Staggered entrance scramble for name1
-    name1Chars.forEach((char, i) => {
-      tl.call(() => scrambleText(char, false, 0.25), null, `intro+=${0.19 + i * 0.04}`);
-    });
+      gsap.timeline({ defaults: { ease: 'power3.out' } })
+        .fromTo(topbar, { autoAlpha: 0, y: -10 }, { autoAlpha: 1, y: 0, duration: 0.34 }, 0)
+        .fromTo(nameA, { autoAlpha: 0, x: -20 }, { autoAlpha: 1, x: 0, duration: 0.5 }, 0.08)
+        .fromTo(nameB, { autoAlpha: 0, x: 20 }, { autoAlpha: 1, x: 0, duration: 0.5 }, 0.1)
+        .fromTo(
+          dossier,
+          { autoAlpha: 0, x: 18 },
+          { autoAlpha: 1, x: 0, duration: 0.48 },
+          0.34
+        )
+        .to(dossierRows, { autoAlpha: 1, x: 0, stagger: 0.06, duration: 0.28 }, 0.44)
+        .fromTo(bottombar, { autoAlpha: 0, y: 10 }, { autoAlpha: 1, y: 0, duration: 0.34 }, 0.5);
+    }, rootRef);
 
-    tl.to(el.querySelector('.intro-name-b'), {
-        opacity: 1,
-        y: 0,
-        skewX: 0,
-        filter: 'blur(0px)',
-        duration: 0.72,
-      }, 'intro+=0.27');
-
-    // Staggered entrance scramble for name2
-    name2Chars.forEach((char, i) => {
-      tl.call(() => scrambleText(char, false, 0.25), null, `intro+=${0.27 + i * 0.04}`);
-    });
-
-    tl.to(dossier, { opacity: 1, scaleY: 1, duration: 0.52, ease: 'power3.inOut' }, 'intro+=0.37')
-      .to(dossierLines, { opacity: 1, x: 0, duration: 0.35, stagger: 0.045 }, 'intro+=0.51')
-      .to(meta, { opacity: 1, y: 0, duration: 0.38, stagger: 0.06, ease: 'power2.out' }, 'intro+=0.66');
-
-    return () => { tl.kill(); };
+    return () => ctx.revert();
   }, [isActive, preloaderDone]);
 
-  const renderScrambleLetters = (text) => {
-    return text.split('').map((char, i) => (
-      <span 
-        key={i} 
-        className="scramble-char" 
-        data-value={char}
-        onMouseEnter={(e) => scrambleText(e.target, false, 0.45)}
-      >
-        {char}
-      </span>
-    ));
-  };
+  if (!preloaderDone) return <section className="section intro-hero" />;
+
+  const dosRows = isF1 ? DOS_F1 : DOS_TERMINAL;
 
   return (
-    <section
-      ref={rootRef}
-      className="section section-stripe intro-hero"
-      style={{
-        flexDirection: 'column',
-        alignItems: 'stretch',
-        justifyContent: 'space-between',
-        padding: '64px clamp(40px, 5vw, 80px) 56px',
-        position: 'relative',
-      }}
-    >
-      {/* Top classification bar */}
-      <div className="intro-top-bar">
-        <span className="intro-stamp" style={{ color: 'var(--color-accent)' }}>
-          <span className="intro-dot" /> CLEARANCE · UNRESTRICTED
-        </span>
-        <span className="intro-stamp">REF · AV-07</span>
-        <span className="intro-stamp intro-stamp-f1">AFFILIATION · INDEPENDENT</span>
-        <span className="intro-stamp intro-stamp-terminal">TERMINAL · ACTIVE</span>
-      </div>
+    <section ref={rootRef} className="section intro-hero">
 
-      {/* Giant name-mark with dossier rail */}
-      <div className="intro-center">
-        <div className="intro-namewrap">
-          <div className="intro-name-a intro-name" style={{ width: 'fit-content' }}>
-            {renderScrambleLetters('AAKASH')}
-          </div>
-          <div className="intro-name-b intro-name" style={{ width: 'fit-content' }}>
-            {renderScrambleLetters('VIJETA')}
-            <span className="intro-name-cursor" aria-hidden="true">_</span>
-          </div>
-          <div className="intro-speedline" aria-hidden="true" />
+      <header className="ihyb-topbar">
+        <div className="ihyb-topbar-left">
+          <span className="intro-dot" />
+          <span className="ihyb-accent">AUTH · ROOT_ACCESS</span>
+          <span className="ihyb-sep">·</span>
+          <span>{isF1 ? 'F1_MODE · ACTIVE' : 'TERMINAL · ACTIVE'}</span>
+        </div>
+      </header>
+
+      <div className="ihyb-center">
+        <div className="ihyb-namewrap">
+          <div className="ihyb-name-a">AAKASH</div>
+          <div className="ihyb-name-b">VIJETA</div>
         </div>
 
-        {/* Dossier rail */}
-        <aside className="intro-dossier">
-          <div className="intro-dossier-line"><span>NAME</span><span>AAKASH VIJETA</span></div>
-          <div className="intro-dossier-line"><span>ROLE</span><span>ENGINEER / BUILDER</span></div>
-          <div className="intro-dossier-line"><span>BASE</span><span>IIT GUWAHATI · IND</span></div>
-          <div className="intro-dossier-line"><span>STACK</span><span>ML · AI SYSTEMS · DATA SCIENCE</span></div>
-          <div className="intro-dossier-line"><span>STATUS</span><span className="intro-status-live">ON TRACK</span></div>
+        <aside className="ihyb-dossier">
+          {dosRows.map((r) => (
+            <div key={r.key} className="ihyb-dos-row">
+              <span className="ihyb-dos-key">{r.key}</span>
+              <span className="ihyb-dos-val">{r.val}</span>
+            </div>
+          ))}
+          <div className="ihyb-dos-row">
+            <span className="ihyb-dos-key">STATUS</span>
+            <span className="ihyb-dos-val ihyb-dos-live">
+              {statusText}<span className="ihyb-cursor">_</span>
+            </span>
+          </div>
         </aside>
       </div>
 
-      {/* Bottom meta row */}
-      <div className="intro-bottom-bar">
-        <div className="intro-meta-row" style={{
-          fontFamily: 'var(--font-display)',
-          fontSize: 'clamp(0.6rem, 0.9vw, 0.7rem)',
-          letterSpacing: '0.3em',
-          color: 'var(--color-muted)',
-          textTransform: 'uppercase',
-        }}>
-          LOCATION · 26.14°N 91.65°E · INDIA
-        </div>
-        <div className="intro-meta-row intro-nav-hint" style={{
-          fontFamily: 'var(--font-display)',
-          fontSize: 'clamp(0.6rem, 0.9vw, 0.7rem)',
-          letterSpacing: '0.3em',
-          color: 'var(--color-muted)',
-          textTransform: 'uppercase',
-        }}>
-          USE ARROW KEYS OR SCROLL TO NAVIGATE
-        </div>
-      </div>
+      <footer className="ihyb-bottombar">
+        <span className="ihyb-clock">SYS_TIME · {timeStr}</span>
+        <KeyHints revealDelay={0} />
+        <span className="ihyb-clock">USE ARROW KEYS OR SCROLL TO NAVIGATE</span>
+      </footer>
+
     </section>
   );
 }

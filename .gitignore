@@ -37,10 +37,22 @@ Thumbs.db
 # Deployment
 .vercel
 
-# Claude Code / AI tooling
+# Claude Code / AI tooling (local-only, never commit)
 .claude/
-CLAUDE.md
+.codex/
+.cursor/
+.continue/
+.aider*
+.windsurf/
 .superpowers/
+.impeccable/
+docs/superpowers/
+CLAUDE.md
+AGENTS.md
+GEMINI.md
+COPILOT.md
+DESIGN.md
+PRODUCT.md
 
 # Graphify knowledge graph (local-only artifacts)
 graphify-out/

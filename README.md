@@ -26,8 +26,8 @@ The portfolio leverages a **"Cinematic Tech-Noir"** aesthetic, blending industri
     *   `TERMINAL` — A phosphor green, CRT-inspired aesthetic for the builder/engineer.
     *   `F1` — A high-contrast, carbon fibre and racing-red aesthetic for the performance-driven professional.
 *   **⚡ GSAP-Powered Motion System:** Deep integration with GSAP (ScrollTrigger, Observer) for smooth, logic-based section transitions and entrance animations.
-*   **🧩 Text Scramble Logic:** A custom "hacker-style" scramble effect used for headings and interactive elements, providing a sense of real-time decryption.
 *   **⏳ Signal-Tracing Preloader:** A sophisticated entry sequence featuring a collapsing frequency wave and a curtain-split reveal. It uses `sessionStorage` persistence to respect user time on return visits.
+*   **🖱 Custom Cursor & Key Hints:** Bespoke pointer states and an on-screen keyboard hint layer reinforce the tactile, instrument-panel feel.
 
 ---
 
@@ -46,20 +46,32 @@ The portfolio leverages a **"Cinematic Tech-Noir"** aesthetic, blending industri
 
 ```bash
 src/
-├── components/        
-│   ├── sections/      # Intro, Projects (Evidence Board), About, Contact
-│   ├── ProjectOverlay.jsx # Detailed project view (Decryption Mode)
-│   ├── Preloader.jsx  # Signal-tracing entry sequence
-│   └── ThemeToggle.jsx # Aesthetic mode switcher
-├── hooks/             
+├── components/
+│   ├── sections/            # Intro, Projects (Evidence Board), About, Contact
+│   ├── ProjectOverlay.jsx   # Detailed project view (Decryption Mode)
+│   ├── Preloader.jsx        # Signal-tracing entry sequence
+│   ├── SectionManager.jsx   # Orchestrates section transitions
+│   ├── GlitchTransition.jsx # Inter-section glitch effect
+│   ├── WipeTransition.jsx   # Curtain-style transition layer
+│   ├── CustomCursor.jsx     # Bespoke pointer states
+│   ├── KeyHints.jsx         # On-screen keyboard guide
+│   ├── NavDots.jsx          # Section indicator dots
+│   ├── BottomBar.jsx        # HUD-style status bar
+│   ├── SectionCounter.jsx   # Section position readout
+│   └── ThemeToggle.jsx      # Aesthetic mode switcher
+├── hooks/
 │   └── useSectionManager.js # Wheel/touch/keyboard navigation logic
-├── utils/             
-│   └── scramble.js    # Character-shuffling animation engine
-├── context/           
+├── context/
 │   └── SectionContext.jsx   # Global state for sections and overlays
-└── styles/            
-    ├── main.css       # Core design system & layout
-    └── sections.css   # Section-specific cinematic styling
+├── data/
+│   └── projects.js          # Project catalogue
+└── styles/
+    ├── Global.css           # Tokens, resets, base layout
+    ├── themes.css           # TERMINAL / F1 theme variables
+    ├── sections.css         # Section-specific cinematic styling
+    ├── Preloader.css        # Entry sequence
+    ├── BottomBar.css        # HUD chrome
+    └── ThemeToggle.css      # Toggle widget
 ```
 
 ---
@@ -95,3 +107,9 @@ npm run build
 Personal project — feel free to explore the source for architectural reference. Please do not redeploy the design or content as your own.
 
 &copy; 2026 Aakash Vijeta
+
+---
+
+## 🧹 Note on local tooling
+
+Local AI/agent config (`.claude/`, `.codex/`, `.cursor/`, `.superpowers/`, `.impeccable/`, `CLAUDE.md`, `AGENTS.md`, `DESIGN.md`, `PRODUCT.md`, etc.) and graphify artifacts (`graphify-out/`) are git-ignored. If any slip into a commit, run `git rm --cached -r <path>` and re-commit.

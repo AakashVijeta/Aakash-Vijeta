@@ -13,47 +13,36 @@ const LOG_LINES = [
 const TOTAL_MS = 2400;
 const EXIT_MS  = 3000;
 const DONE_MS  = 3800;
-// Overall length = DONE_MS (was 4800ms, now 3800ms — 1s shorter).
 const SVG_H    = 60;
-const CY       = SVG_H / 2;
+const CY       = SVG_H / 2;          // 30
+const MAX_AMP  = SVG_H - 2;          // 58px — fills the SVG height
+const NUM_PTS  = 140;                 // dense enough to look electronic
 
-function lcg(seed) {
-  let s = seed >>> 0;
-  return () => {
-    s = Math.imul(1664525, s) + 1013904223 >>> 0;
-    return s / 0xffffffff;
-  };
-}
+// Rebuild signal path from scratch — pure Math.random() per point, no interpolation.
+// Adjacent points are completely uncorrelated; that discontinuity IS the effect.
+function buildPath(W, amp) {
+  if (amp < 0.5) return `M 0,${CY} L ${W},${CY}`;
 
-function genNoiseLayers(W) {
-  const rand = lcg(0xdeadbeef);
-  const coarseStep  = 50;
-  const coarseCount = Math.ceil(W / coarseStep) + 2;
-  const coarse      = Array.from({ length: coarseCount }, () => rand() * 2 - 1);
-  const fineStep    = 3;
-  const fineCount   = Math.ceil(W / fineStep) + 2;
-  const fine        = Array.from({ length: fineCount }, () => rand() * 2 - 1);
-  return { coarse, coarseStep, fine, fineStep };
-}
+  // Occasionally vary step size so density fluctuates across the signal
+  let d = `M 0,${CY + (Math.random() - 0.5) * amp}`;
+  let x = 0;
+  while (x < W) {
+    // Variable step: usually tight, occasionally wider (creates sparse/dense regions)
+    const step = Math.random() < 0.08
+      ? W / NUM_PTS * (2 + Math.random() * 3)   // occasional large jump
+      : W / NUM_PTS * (0.4 + Math.random() * 1.2);
+    x = Math.min(x + step, W);
 
-function lerp(a, b, t) { return a + (b - a) * t; }
+    const y = CY + (Math.random() - 0.5) * amp;
 
-function buildSignalPath(layers, amp = 24) {
-  const W = window.innerWidth;
-  const { coarse, coarseStep, fine, fineStep } = layers;
-  const points = [];
-  let fi = 0;
-
-  for (let x = 0; x <= W; x += fineStep) {
-    const ci        = x / coarseStep;
-    const ciFlr     = Math.floor(ci);
-    const coarseVal = lerp(coarse[ciFlr] ?? 0, coarse[ciFlr + 1] ?? 0, ci - ciFlr);
-    const fineVal   = (fine[fi] ?? 0) * 0.25;
-    fi++;
-    const y = CY + amp * (coarseVal + fineVal);
-    points.push(`${x.toFixed(0)},${y.toFixed(2)}`);
+    // Packet loss: ~2% of segments become gaps (moveTo instead of lineTo)
+    if (Math.random() < 0.02) {
+      d += ` M ${x.toFixed(1)},${y.toFixed(2)}`;
+    } else {
+      d += ` L ${x.toFixed(1)},${y.toFixed(2)}`;
+    }
   }
-  return 'M ' + points.join(' L ');
+  return d;
 }
 
 export default function Preloader() {
@@ -63,75 +52,61 @@ export default function Preloader() {
   const [pct, setPct]           = useState(0);
   const [logCount, setLogCount] = useState(0);
   const [freq, setFreq]         = useState(12.4);
-  const [amplitude, setAmplitude] = useState(24);
 
-  const rafRef       = useRef(null);
-  const layerRef     = useRef(null);
-  const signalRef    = useRef(null);
-  const contentRef   = useRef(null); // all visible HUD — fades out before curtains leave
-  const curtainTRef  = useRef(null); // top half bg — slides up
-  const curtainBRef  = useRef(null); // bottom half bg — slides down
-  const edgeTRef     = useRef(null); // glowing bottom edge of top curtain
-  const edgeBRef     = useRef(null); // glowing top edge of bottom curtain
-  const pathRef      = useRef(null);
+  const signalRef   = useRef(null);  // SVG <path> element
+  const waveRafRef  = useRef(null);
+  const ampRef      = useRef(MAX_AMP); // GSAP tweens this 58 → 0
+  const contentRef  = useRef(null);
+  const curtainTRef = useRef(null);
+  const curtainBRef = useRef(null);
+  const edgeTRef    = useRef(null);
+  const edgeBRef    = useRef(null);
 
-  if (!layerRef.current) layerRef.current = genNoiseLayers(window.innerWidth);
-  if (!pathRef.current)  pathRef.current  = buildSignalPath(layerRef.current);
-
+  // ── GSAP: amplitude collapse → curtain exit ────────────────────────────────
   useEffect(() => {
     if (!signalRef.current) return;
-    const W = window.innerWidth;
-
     const ctx = gsap.context(() => {
-      // Seamless horizontal scroll
-      gsap.to(signalRef.current, {
-        x: -W, duration: 4, ease: 'none', repeat: -1,
-      });
-
-      // Wave smoothly collapses by reducing amplitude instead of scaleY
       gsap.timeline()
-        .to({ amp: 24 }, {
-          amp: 0,
+        .to(ampRef, {
+          current: 0,
           duration: TOTAL_MS / 1000,
           ease: 'power2.inOut',
-          onUpdate: function() {
-            setAmplitude(this.targets()[0].amp);
-          },
         })
-        // Edges fade in as wave finishes — they inherit the flat line position
         .to([edgeTRef.current, edgeBRef.current], {
-          opacity: 1,
-          duration: 0.12,
-          ease: 'none',
-        }, '<90%') // Slightly later for smoother handoff
-        // Content fades out
+          opacity: 1, duration: 0.12, ease: 'none',
+        }, '<90%')
         .to(contentRef.current, {
-          opacity: 0,
-          duration: 0.15,
-          ease: 'none',
+          opacity: 0, duration: 0.15, ease: 'none',
         })
-        // Curtains slide away — edges ride with them, splitting the flat line
         .to(curtainTRef.current, {
-          yPercent: -100,
-          duration: 0.6,
-          ease: 'power2.inOut',
+          yPercent: -100, duration: 0.6, ease: 'power2.inOut',
         }, '<0.05')
         .to(curtainBRef.current, {
-          yPercent: 100,
-          duration: 0.6,
-          ease: 'power2.inOut',
+          yPercent:  100, duration: 0.6, ease: 'power2.inOut',
         }, '<')
-        // Edges fade out as they leave
         .to([edgeTRef.current, edgeBRef.current], {
-          opacity: 0,
-          duration: 0.3,
-          ease: 'power2.in',
+          opacity: 0, duration: 0.3, ease: 'power2.in',
         }, '>-0.25');
     });
-
     return () => ctx.revert();
   }, []);
 
+  // ── RAF: rebuild signal every frame ───────────────────────────────────────
+  useEffect(() => {
+    if (stage === 'done' || !signalRef.current) return;
+    const W = window.innerWidth;
+
+    const tick = () => {
+      if (signalRef.current) {
+        signalRef.current.setAttribute('d', buildPath(W, ampRef.current));
+      }
+      waveRafRef.current = requestAnimationFrame(tick);
+    };
+    waveRafRef.current = requestAnimationFrame(tick);
+    return () => { if (waveRafRef.current) cancelAnimationFrame(waveRafRef.current); };
+  }, [stage]);
+
+  // ── Progress + log + freq readout ─────────────────────────────────────────
   useEffect(() => {
     if (stage === 'done') return;
 
@@ -142,6 +117,7 @@ export default function Preloader() {
 
     const start = performance.now();
     let lastFreqUpdate = 0;
+    let pctRaf;
     const tick = (now) => {
       const p = Math.min((now - start) / TOTAL_MS, 1);
       setPct(Math.floor(p * 100));
@@ -149,10 +125,10 @@ export default function Preloader() {
         setFreq(+(8 + Math.random() * 18).toFixed(1));
         lastFreqUpdate = now;
       }
-      if (p < 1) rafRef.current = requestAnimationFrame(tick);
+      if (p < 1) pctRaf = requestAnimationFrame(tick);
       else setPct(100);
     };
-    rafRef.current = requestAnimationFrame(tick);
+    pctRaf = requestAnimationFrame(tick);
 
     const t1 = setTimeout(() => {
       setStage('exit');
@@ -167,7 +143,7 @@ export default function Preloader() {
       timers.forEach(clearTimeout);
       clearTimeout(t1);
       clearTimeout(t2);
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      cancelAnimationFrame(pctRaf);
     };
   }, [stage]);
 
@@ -179,9 +155,6 @@ export default function Preloader() {
   return (
     <div className={`pl ${stage === 'exit' ? 'pl--exit' : ''}`}>
 
-      {/* Two curtains — together they ARE the dark background.
-          They slide away from the center line (where the flat signal sits)
-          to reveal the site from the inside out. */}
       <div className="pl-curtain-t" ref={curtainTRef}>
         <div className="pl-curtain-edge pl-curtain-edge--t" ref={edgeTRef} />
       </div>
@@ -189,7 +162,6 @@ export default function Preloader() {
         <div className="pl-curtain-edge pl-curtain-edge--b" ref={edgeBRef} />
       </div>
 
-      {/* All visible HUD content — fades out just before curtains leave */}
       <div className="pl-content" ref={contentRef}>
 
         <div className="pl-scan-box" />
@@ -209,17 +181,17 @@ export default function Preloader() {
           <div className="pl-freq-label">FREQ: {freq} Hz</div>
           <div className="pl-signal-wrap">
             <svg
-              ref={signalRef}
               className="pl-signal-svg"
-              width={W * 2}
+              width={W}
               height={SVG_H}
-              viewBox={`0 0 ${W * 2} ${SVG_H}`}
+              viewBox={`0 0 ${W} ${SVG_H}`}
               preserveAspectRatio="none"
             >
-              <path d={buildSignalPath(layerRef.current, amplitude)} className="pl-signal-path" />
-              <g transform={`translate(${W}, 0)`}>
-                <path d={buildSignalPath(layerRef.current, amplitude)} className="pl-signal-path" />
-              </g>
+              <path
+                ref={signalRef}
+                d={`M 0,${CY} L ${W},${CY}`}
+                className="pl-signal-path"
+              />
             </svg>
           </div>
           <div className={`pl-status-label ${done ? 'pl-status-label--done' : ''}`}>

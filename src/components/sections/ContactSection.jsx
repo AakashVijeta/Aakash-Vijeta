@@ -1,128 +1,92 @@
 import { useLayoutEffect, useRef } from 'react';
-import { scrambleText } from '../../utils/scramble';
+import KeyHints from '../KeyHints';
+
 
 const EMAIL = 'aakashvijeta2@gmail.com';
 const GITHUB = 'https://github.com/AakashVijeta';
-const LINKEDIN = 'https://linkedin.com/in/aakashvijeta';
+const LINKEDIN = 'https://www.linkedin.com/in/aakash-vijeta-1bb42b2b9';
 
 export default function ContactSection({ isActive }) {
   const rootRef = useRef(null);
 
   useLayoutEffect(() => {
     if (!isActive) return;
-    const title = rootRef.current?.querySelector('.contact-title');
-    if (title) scrambleText(title);
   }, [isActive]);
 
   return (
     <section
       ref={rootRef}
-      className="section section-stripe"
+      className="section section-stripe contact-section"
       style={{
         flexDirection: 'column',
         alignItems: 'stretch',
-        justifyContent: 'space-between',
-        padding: '64px 6vw 56px',
+        justifyContent: 'center',
+        padding: 0,
+        overflow: 'hidden',
       }}
     >
       {/* Top classification */}
-      <div className="section-enter-item" style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'baseline',
-        paddingBottom: '12px',
-        borderBottom: '1px solid var(--color-border)',
-        fontFamily: 'var(--font-display)',
-        fontSize: '0.8rem',
-        letterSpacing: '0.35em',
-        color: 'var(--color-muted)',
-        textTransform: 'uppercase',
-      }}>
-        <span style={{ color: 'var(--color-accent)' }}>
-          <span className="intro-dot" /> CHANNEL · OPEN
-        </span>
-        <span>PROTOCOL · SMTP</span>
-      </div>
+      <header className="contact-topbar section-enter-item">
+        <div className="contact-topbar-row">
+          <h2 className="contact-title-main">SOCIALS</h2>
+          <div className="contact-topmeta">
+            <div style={{ color: 'var(--color-accent)' }}>
+              <span className="intro-dot" /> CHANNEL · OPEN
+            </div>
+          </div>
+        </div>
+        <hr className="profiler-rule" />
+      </header>
 
       {/* Center: command + target */}
-      <div style={{
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '24px',
-        alignItems: 'flex-start',
-        justifyContent: 'center',
-        flex: 1,
-      }}>
-        <div className="section-enter-item" style={{
-          fontFamily: 'var(--font-display)',
-          fontSize: '1rem',
-          letterSpacing: '0.45em',
-          color: 'var(--color-accent)',
-          textTransform: 'uppercase',
-        }}>
-          <span className="contact-title">Initiate Contact</span>
-          <div className="speed-line" />
-        </div>
-
-        <div className="section-enter-item contact-command">
-          <span className="contact-prompt">&gt;</span>
-          <span className="contact-verb">send</span>
-          <span className="contact-target">{EMAIL}</span>
-          <span className="contact-cursor">_</span>
-        </div>
-
-        <div className="section-enter-item" style={{ display: 'flex', gap: '16px', alignItems: 'center', flexWrap: 'wrap', marginTop: '8px' }}>
-          <a
-            href={`mailto:${EMAIL}`}
-            className="contact-bracket-box"
-          >
-            [ INITIATE CONTACT ] 
-          </a>
-          <a
-            href={GITHUB}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="contact-bracket-box"
-          >
-            [ GITHUB ]
-          </a>
-          <a
-            href={LINKEDIN}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="contact-bracket-box"
-          >
-            [ LINKEDIN ]
-          </a>
-        </div>
-
-        <div className="section-enter-item contact-dossier">
-          <div className="intro-dossier-line">
-            <span>RESPONSE</span>
-            <span>&lt; 24H</span>
+      <div className="contact-main">
+        <div className="contact-content-inner">
+          <div className="section-enter-item" style={{
+            fontFamily: 'var(--font-display)',
+            fontSize: '1rem',
+            letterSpacing: '0.45em',
+            color: 'var(--color-accent)',
+            textTransform: 'uppercase',
+            marginBottom: '24px',
+          }}>
+            <span className="contact-title">Initiate Contact</span>
           </div>
-          <div className="intro-dossier-line">
-            <span>TIMEZONE</span>
-            <span>UTC+05:30 · IST</span>
+
+          <div className="section-enter-item contact-command">
+            <span className="contact-prompt">&gt;</span>
+            <span className="contact-verb">send</span>
+            <span className="contact-target">{EMAIL}</span>
+            <span className="contact-cursor">_</span>
+          </div>
+
+          <div className="section-enter-item" style={{ display: 'flex', gap: '16px', alignItems: 'center', flexWrap: 'wrap', marginTop: '32px' }}>
+            <a href={`mailto:${EMAIL}`} className="contact-bracket-box">[ INITIATE CONTACT ]</a>
+            <a href={GITHUB} target="_blank" rel="noopener noreferrer" className="contact-bracket-box">[ GITHUB ]</a>
+            <a href={LINKEDIN} target="_blank" rel="noopener noreferrer" className="contact-bracket-box">[ LINKEDIN ]</a>
+          </div>
+
+          <div className="section-enter-item contact-dossier" style={{ marginTop: '48px' }}>
+            <div className="intro-dossier-line">
+              <span>RESPONSE</span>
+              <span>&lt; 24H</span>
+            </div>
+            <div className="intro-dossier-line">
+              <span>TIMEZONE</span>
+              <span>UTC+05:30 · IST</span>
+            </div>
           </div>
         </div>
       </div>
 
       {/* Bottom meta */}
-      <div className="contact-bottom-bar section-enter-item" style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        paddingTop: '12px',
-        borderTop: '1px solid var(--color-border)',
-        fontFamily: 'var(--font-display)',
-        fontSize: '0.8rem',
-        letterSpacing: '0.3em',
-        color: 'var(--color-muted)',
-        textTransform: 'uppercase',
-      }}>
-        <span>END · TRANSMISSION</span>
-        <span>SIG · AV-07</span>
-      </div>
+      <footer className="contact-bottombar section-enter-item">
+        <hr className="profiler-rule" />
+        <div className="contact-bottombar-inner">
+          <span>END · TRANSMISSION</span>
+          <KeyHints />
+          <span>PROTOCOL · SMTP</span>
+        </div>
+      </footer>
     </section>
   );
 }

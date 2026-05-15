@@ -1,5 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 
+function getCursorCoords({ clientX, clientY }) {
+  return { x: clientX, y: clientY };
+}
+
 export default function CustomCursor() {
   const posRef = useRef({ x: -100, y: -100 });
   const dotRef = useRef(null);
@@ -11,8 +15,9 @@ export default function CustomCursor() {
     if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
 
     const onMove = (e) => {
-      posRef.current = { x: e.clientX, y: e.clientY };
-      setCoords({ x: e.clientX, y: window.innerHeight - e.clientY });
+      const nextCoords = getCursorCoords(e);
+      posRef.current = nextCoords;
+      setCoords(nextCoords);
 
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
       rafRef.current = requestAnimationFrame(() => {

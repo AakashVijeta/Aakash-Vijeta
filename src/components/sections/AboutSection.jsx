@@ -1,5 +1,6 @@
 import { useLayoutEffect, useRef } from 'react';
-import { scrambleText } from '../../utils/scramble';
+import KeyHints from '../KeyHints';
+
 
 const CORE_PRIMARY = ['Python', 'FastAPI'];
 const CORE_REST = [
@@ -43,7 +44,7 @@ const EXPERIENCES = [
   },
   {
     org: '[INDEPENDENT R&D]',
-    range: '2021 - PRESENT',
+    range: '2024 - PRESENT',
     line: 'Continuous iteration across ML pipelines, backend systems, and quantitative research',
   },
 ];
@@ -53,8 +54,6 @@ export default function AboutSection({ isActive }) {
 
   useLayoutEffect(() => {
     if (!isActive) return;
-    const title = rootRef.current?.querySelector('.profiler-title');
-    if (title) scrambleText(title);
   }, [isActive]);
 
   return (
@@ -63,9 +62,9 @@ export default function AboutSection({ isActive }) {
       className="section section-stripe about-profiler section-scroll"
       style={{
         flexDirection: 'column',
-        alignItems: 'center',
+        alignItems: 'stretch',
         justifyContent: 'center',
-        padding: '28px clamp(32px, 4vw, 72px) 36px',
+        padding: 0,
         overflow: 'hidden',
       }}
     >
@@ -73,14 +72,14 @@ export default function AboutSection({ isActive }) {
         <div className="profiler-head-row">
           <h2 className="profiler-title">SUBJECT PROFILE</h2>
           <div className="profiler-head-meta">
-            <div>REF: AV-01 · IIT GUWAHATI</div>
             <div>STATUS: ACTIVE DEVELOPMENT</div>
           </div>
         </div>
         <hr className="profiler-rule" />
       </header>
 
-      <div className="profiler-container">
+      <div className="profiler-main-scroll custom-scrollbar">
+        <div className="profiler-container">
 
         {/* LEFT — IDENTITY */}
         <div className="profiler-module col-identity section-enter-item">
@@ -98,7 +97,9 @@ export default function AboutSection({ isActive }) {
               <div className="scan-data-profile data-top-profile">REC_ACTIVE [●]</div>
               <div className="scan-data-profile data-bot-profile">ISO_FACE_ID: 99.9%</div>
             </div>
-            <div className="scan-beam" />
+            <div className="scan-beam-track">
+              <div className="scan-beam" />
+            </div>
           </div>
 
           <div className="id-data-grid">
@@ -213,7 +214,17 @@ export default function AboutSection({ isActive }) {
           </div>
         </div>
 
+        </div>
       </div>
+
+      <footer className="profiler-foot section-enter-item">
+        <hr className="profiler-rule" />
+        <div className="profiler-foot-inner">
+          <div className="foot-version">SYSTEMS_REPORT_V.2.0.46</div>
+          <KeyHints />
+          <div className="profiler-head-meta">S/N: 2005-10-11-AAK</div>
+        </div>
+      </footer>
     </section>
   );
 }

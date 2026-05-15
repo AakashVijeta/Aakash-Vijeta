@@ -3,6 +3,9 @@
   inset: 0;
   z-index: 99998;
   overflow: hidden;
+  --pl-axis: 44%;
+  --pl-scan-half: 65px;
+  --pl-gutter: 12vw;
 }
 .pl--exit {
   pointer-events: none;
@@ -49,10 +52,10 @@
 /* ── Scan box outline ── */
 .pl-scan-box {
   position: absolute;
-  top: calc(44% - 65px);
-  left: 12vw;
-  right: 12vw;
-  height: 130px;
+  top: calc(var(--pl-axis) - var(--pl-scan-half));
+  left: var(--pl-gutter);
+  right: var(--pl-gutter);
+  height: calc(var(--pl-scan-half) * 2);
   border: 1px solid color-mix(in srgb, var(--color-accent) 22%, transparent);
   pointer-events: none;
 }
@@ -64,8 +67,18 @@
   height: 28px;
   pointer-events: none;
 }
-.pl-corner--tl { top: calc(44% - 65px); left: 12vw;  border-top:    1px solid var(--color-accent); border-left:   1px solid var(--color-accent); }
-.pl-corner--br { top: calc(44% + 37px); right: 12vw; border-bottom: 1px solid var(--color-accent); border-right:  1px solid var(--color-accent); }
+.pl-corner--tl {
+  top: calc(var(--pl-axis) - var(--pl-scan-half));
+  left: var(--pl-gutter);
+  border-top:    1px solid var(--color-accent);
+  border-left:   1px solid var(--color-accent);
+}
+.pl-corner--br {
+  top: calc(var(--pl-axis) + var(--pl-scan-half) - 28px);
+  right: var(--pl-gutter);
+  border-bottom: 1px solid var(--color-accent);
+  border-right:  1px solid var(--color-accent);
+}
 
 /* ── Top-right HUD ── */
 .pl-hud-tr {
@@ -125,7 +138,7 @@
   position: absolute;
   top: -22px;
   left: 50%;
-  transform: translateX(-20%);
+  transform: translateX(-50%);
   font-family: var(--font-mono);
   font-size: 0.55rem;
   letter-spacing: 0.2em;
@@ -137,7 +150,7 @@
 /* ── Center signal line ── */
 .pl-centerline {
   position: absolute;
-  top: calc(44% - 30px);
+  top: calc(var(--pl-axis) - 30px);
   left: 0;
   right: 0;
   display: flex;
@@ -162,9 +175,11 @@
   filter: drop-shadow(0 0 3px var(--color-accent)) drop-shadow(0 0 6px color-mix(in srgb, var(--color-accent) 50%, transparent));
 }
 .pl-status-label {
-  position: relative;
+  position: absolute;
   z-index: 1;
-  top: 15px;
+  top: 30px;
+  left: 50%;
+  transform: translate(-50%, -50%);
   font-family: var(--font-display);
   font-size: 0.62rem;
   letter-spacing: 0.35em;
@@ -185,7 +200,7 @@
 /* ── Percentage ── */
 .pl-pct-wrap {
   position: absolute;
-  top: calc(44% + 28px);
+  top: calc(var(--pl-axis) + 28px);
   left: 0; right: 0;
   display: flex;
   justify-content: center;
@@ -202,8 +217,8 @@
 /* ── Bottom log ── */
 .pl-log {
   position: absolute;
-  bottom: calc(50% - 160px);
-  left: 15vw;
+  bottom: clamp(40px, 12vh, 120px);
+  left: var(--pl-gutter);
   display: flex;
   flex-direction: column;
   gap: 7px;
@@ -235,26 +250,19 @@
    Mobile responsive — match the desktop layout proportionally
    ================================================================ */
 @media (max-width: 768px) {
-  /* Scan box: tighten side margins so frame stays proportional */
-  .pl-scan-box {
-    left: 6vw;
-    right: 6vw;
-    height: 110px;
-    top: calc(44% - 55px);
+  .pl {
+    --pl-scan-half: 55px;
+    --pl-gutter: 6vw;
   }
 
-  /* Corner brackets: match scan-box repositioning */
-  .pl-corner--tl {
-    top: calc(44% - 55px);
-    left: 6vw;
+  /* Corner brackets: smaller on mobile */
+  .pl-corner--tl,
+  .pl-corner--br {
     width: 22px;
     height: 22px;
   }
   .pl-corner--br {
-    top: calc(44% + 27px);
-    right: 6vw;
-    width: 22px;
-    height: 22px;
+    top: calc(var(--pl-axis) + var(--pl-scan-half) - 22px);
   }
 
   /* HUD radar — pull closer to edge so it doesn't eat into center */
@@ -278,9 +286,8 @@
     letter-spacing: 0.15em;
   }
 
-  /* Status label — slightly smaller and shifted to perfectly center with the signal line */
+  /* Status label — smaller on mobile */
   .pl-status-label {
-    top: 21px;
     font-size: 0.52rem;
     letter-spacing: 0.25em;
     padding: 4px 12px;
@@ -291,10 +298,9 @@
     font-size: clamp(48px, 14vw, 80px);
   }
 
-  /* Log lines — tighten left margin, smaller text */
+  /* Log lines — smaller text */
   .pl-log {
-    left: 7vw;
-    bottom: calc(50% - 140px);
+    bottom: clamp(32px, 10vh, 80px);
     gap: 5px;
     padding-left: 10px;
   }
@@ -305,24 +311,18 @@
 }
 
 @media (max-width: 480px) {
-  .pl-scan-box {
-    left: 4vw;
-    right: 4vw;
-    height: 95px;
-    top: calc(44% - 48px);
+  .pl {
+    --pl-scan-half: 48px;
+    --pl-gutter: 4vw;
   }
 
-  .pl-corner--tl {
-    top: calc(44% - 48px);
-    left: 4vw;
+  .pl-corner--tl,
+  .pl-corner--br {
     width: 18px;
     height: 18px;
   }
   .pl-corner--br {
-    top: calc(44% + 20px);
-    right: 4vw;
-    width: 18px;
-    height: 18px;
+    top: calc(var(--pl-axis) + var(--pl-scan-half) - 18px);
   }
 
   .pl-hud-tr {
@@ -344,7 +344,6 @@
   }
 
   .pl-status-label {
-    top: 21px;
     font-size: 0.46rem;
     padding: 3px 10px;
     letter-spacing: 0.2em;
@@ -358,8 +357,7 @@
   }
 
   .pl-log {
-    left: 5vw;
-    bottom: calc(50% - 120px);
+    bottom: clamp(24px, 8vh, 60px);
     gap: 4px;
     padding-left: 8px;
   }

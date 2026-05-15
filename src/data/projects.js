@@ -66,7 +66,6 @@ export const projectDetails = [
       "FastAPI",
       "React 19",
       "Vite",
-      "Netlify Edge Functions",
       "Groq · Llama 3.3 70B",
     ],
     image: BASE + "assets/niftyedge.png",

@@ -115,28 +115,6 @@ body::after {
   background-color: var(--color-bg);
 }
 
-/* ── F1: left red stripe on sections ─────────────────────────── */
-[data-theme="f1"] .section-stripe::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 3px;
-  height: 100%;
-  background: var(--color-accent);
-  pointer-events: none;
-}
-
-/* Mobile: drop the left red stripe (and its corner accent) — the section
-   root already runs edge-to-edge on narrow viewports and the strip just
-   eats into content padding. */
-@media (max-width: 767.98px) {
-  [data-theme="f1"] .section-stripe::before,
-  [data-theme="f1"] .section-stripe::after {
-    display: none;
-  }
-}
-
 /* ── F1: corner accents on sections ──────────────────────────── */
 [data-theme="f1"] .section-stripe::after {
   content: '';
